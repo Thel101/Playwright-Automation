@@ -67,9 +67,10 @@ steps:
   displayName: 'Publish Auth Debug Screenshots'
   continueOnError: true
 
-# Install remaining browsers after auth setup
+# Install remaining browsers after auth setup - note the --force flag for Edge
 - script: |
-    npx playwright install firefox webkit msedge
+    npx playwright install firefox webkit
+    npx playwright install --force msedge
   displayName: 'Install remaining browsers'
   condition: succeeded()
 
