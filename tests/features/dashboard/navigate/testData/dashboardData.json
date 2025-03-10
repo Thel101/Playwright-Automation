@@ -1,6 +1,6 @@
 {
     "urls": {
-        "baseUrl": "https://compliancerdev.auditmypayroll.com.au",
+        "baseUrl": "https://compliancerdev.auditmypayroll.com.au",      
         "expectedDashboardUrl": "https://compliancerdev.auditmypayroll.com.au/dashboard",
         "expectedSettingsUrl": "https://compliancerdev.auditmypayroll.com.au/settings"
     },
@@ -14,6 +14,7 @@
         "content": {
             "mainContent": "[data-testid='dashboard-content']",
             "welcomeMessage": "[data-testid='welcome-message']"
-        }
+        },
+        "userButton": "#user-button"
     }
 }

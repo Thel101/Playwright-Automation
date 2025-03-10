@@ -10,13 +10,7 @@ test.describe('Dashboard Navigation', () => {
 
     test.beforeEach(async ({ page }) => {
         dashboardPage = new DashboardPage(page);
-        page.on('console', msg => console.log(msg.text()));
-        
-        // Navigate to dashboard with authentication
-        await page.goto(testData.urls.baseUrl, {
-            waitUntil: 'domcontentloaded',
-            timeout: 60000
-        });
+        await page.goto(testData.urls.baseUrl);
         await page.waitForLoadState('networkidle');
     });
 
@@ -34,15 +28,15 @@ test.describe('Dashboard Navigation', () => {
             // Wait for dashboard elements using page object
             await dashboardPage.waitForDashboardLoad();
             
-            // Verify navigation elements
+            // Verify user button is visible
             await expect(page.locator('#user-button')).toBeVisible();
             
             // Take a screenshot for verification
-            await page.screenshot({ path: 'tests/features/dashboard/navigate/screenshots/authenticated-dashboard.png' });
+            await page.screenshot({ path: 'tests/features/dashboard/navigate/screenshots/authenticated-dashboard.png', fullPage: true });
             console.log('Test completed successfully');
         } catch (error) {
             console.error('Test failed:', error);
-            await page.screenshot({ path: 'tests/features/dashboard/navigate/screenshots/auth-error.png' });
+            await page.screenshot({ path: 'tests/features/dashboard/navigate/screenshots/auth-error.png', fullPage: true });
             throw error;
         }
     });

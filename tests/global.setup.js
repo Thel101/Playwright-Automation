@@ -7,19 +7,26 @@ setup('authenticate', async ({ page, context }) => {
     
     console.log('Starting authentication setup...');
     
-    // Navigate to the base URL
-    await page.goto(testData.urls.baseUrl);
-    
-    // Perform login with Azure AD B2C flow
-    await loginPage.login(testData.validUser.username, testData.validUser.password);
-    
-    // Wait for successful login and navigation
-    console.log('Waiting for successful login...');
-    await page.waitForURL(testData.urls.expectedDashboardUrl);
-    await page.waitForLoadState('networkidle');
-    
-    console.log('Saving authentication state...');
-    // Save signed-in state to 'auth.json'
-    await context.storageState({ path: 'auth.json' });
-    console.log('Authentication state saved successfully');
+    try {
+        // Navigate to the base URL
+        await page.goto(testData.urls.baseUrl);
+        await page.waitForLoadState('networkidle');
+        
+        // Perform login with Azure AD B2C flow
+        await loginPage.login(testData.validUser.username, testData.validUser.password);
+        
+        // Wait for successful login and navigation
+        console.log('Waiting for successful login...');
+        await page.waitForURL(testData.urls.expectedHomeUrl);
+        await page.waitForLoadState('networkidle');
+        
+        console.log('Saving authentication state...');
+        // Save signed-in state to 'auth.json'
+        await context.storageState({ path: 'auth.json' });
+        console.log('Authentication state saved successfully');
+    } catch (error) {
+        console.error('Authentication setup failed:', error);
+        await page.screenshot({ path: 'tests/screenshots/auth-setup-error.png', fullPage: true });
+        throw error;
+    }
 });

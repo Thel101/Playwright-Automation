@@ -4,23 +4,30 @@ const testData = require('../testData/dashboardData.json');
 class DashboardPage extends BasePage {
     constructor(page) {
         super(page);
-        // Using selectors from testData for better maintainability
-        this.selectors = testData.elements;
+        this.selectors = {
+            userButton: '#user-button'
+        };
     }
 
     async waitForDashboardLoad() {
         console.log('Waiting for dashboard to load...');
-        await this.page.waitForSelector(this.selectors.navigation.mainNav, { 
-            state: 'visible', 
-            timeout: 30000 
-        });
-        await this.page.waitForLoadState('networkidle');
-        console.log('Dashboard loaded successfully');
+        try {
+            await this.page.waitForSelector(this.selectors.userButton, { 
+                state: 'visible', 
+                timeout: 30000 
+            });
+            await this.page.waitForLoadState('networkidle');
+            console.log('Dashboard loaded successfully');
+        } catch (error) {
+            console.error('Failed to load dashboard:', error);
+            await this.page.screenshot({ path: 'tests/features/dashboard/navigate/screenshots/dashboard-load-error.png', fullPage: true });
+            throw error;
+        }
     }
 
     async getUserProfileInfo() {
         console.log('Getting user profile information...');
-        const profileElement = this.page.locator(this.selectors.navigation.userProfile);
+        const profileElement = this.page.locator(this.selectors.userProfile);
         await profileElement.waitFor({ state: 'visible', timeout: 30000 });
         const profileText = await profileElement.textContent();
         console.log('User profile info retrieved:', profileText);
@@ -29,7 +36,7 @@ class DashboardPage extends BasePage {
 
     async navigateToSettings() {
         console.log('Navigating to settings...');
-        const settingsButton = this.page.locator(this.selectors.navigation.settingsButton);
+        const settingsButton = this.page.locator(this.selectors.settingsButton);
         await settingsButton.waitFor({ state: 'visible', timeout: 30000 });
         await settingsButton.click();
         await this.page.waitForLoadState('networkidle');
@@ -38,7 +45,7 @@ class DashboardPage extends BasePage {
 
     async logout() {
         console.log('Logging out...');
-        const logoutButton = this.page.locator(this.selectors.navigation.logoutButton);
+        const logoutButton = this.page.locator(this.selectors.logoutButton);
         await logoutButton.waitFor({ state: 'visible', timeout: 30000 });
         await logoutButton.click();
         await this.page.waitForLoadState('networkidle');
