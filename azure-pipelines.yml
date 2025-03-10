@@ -15,19 +15,45 @@ steps:
 
 - script: |
     npm ci
-    npx playwright install --with-deps
-  displayName: 'Install dependencies and browsers'
+  displayName: 'Install dependencies'
+
+# Install browsers with system dependencies for authentication
+- script: |
+    npx playwright install --with-deps chromium
+  displayName: 'Install Chromium for auth setup'
 
 - script: |
-    npx playwright test tests/global.setup.js --project=setup
+    npx playwright test tests/global.setup.js --project=setup --headed
   displayName: 'Run Authentication Setup'
+  env:
+    # Azure AD B2C credentials from variable group
+    TEST_USERNAME: $(AZURE_AD_B2C_USERNAME)
+    TEST_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
+    # Extended timeouts for Azure AD B2C navigation
+    PLAYWRIGHT_TIMEOUT: 120000
+    PLAYWRIGHT_NAVIGATION_TIMEOUT: 60000
+
+# Install remaining browsers after auth setup
+- script: |
+    npx playwright install firefox webkit msedge
+  displayName: 'Install remaining browsers'
+
+- script: |
+    npx playwright test tests/features/auth/login/login.spec.js --project=chrome-unauthenticated
+    npx playwright test tests/features/auth/login/login.spec.js --project=edge-unauthenticated
+    npx playwright test tests/features/auth/login/login.spec.js --project=firefox-unauthenticated
+    npx playwright test tests/features/auth/login/login.spec.js --project=webkit-unauthenticated
+  displayName: 'Run Login Tests'
   env:
     TEST_USERNAME: $(AZURE_AD_B2C_USERNAME)
     TEST_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
 
 - script: |
-    npx playwright test
-  displayName: 'Run Playwright Tests'
+    npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=chrome-authenticated
+    npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=edge-authenticated
+    npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=firefox-authenticated
+    npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=webkit-authenticated
+  displayName: 'Run Dashboard Tests'
   env:
     TEST_USERNAME: $(AZURE_AD_B2C_USERNAME)
     TEST_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
