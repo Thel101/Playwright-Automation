@@ -32,13 +32,12 @@ steps:
 - script: |
     npx playwright test tests/global.setup.js --project=setup --headed --timeout=180000
     
-    REM Check if auth.json exists and set variable
+    REM Create a marker file if auth.json exists
     if exist auth.json (
-      echo "Auth file exists, setting variable..."
-      echo ##vso[task.setvariable variable=AUTH_SUCCEEDED;isOutput=true]true
+      echo "Auth file exists, creating marker file..."
+      echo "Authentication successful" > auth_success.marker
     ) else (
       echo "Auth file does not exist"
-      echo ##vso[task.setvariable variable=AUTH_SUCCEEDED;isOutput=true]false
     )
     
     REM Copy any screenshots to the screenshots directory
@@ -48,8 +47,10 @@ steps:
     if exist post-login-state.png (
       copy post-login-state.png screenshots\
     )
+    
+    REM List files in directory for debugging
+    dir
   displayName: 'Run Authentication Setup'
-  name: authStep
   env:
     # Azure AD B2C credentials from variable group
     AZURE_AD_B2C_USERNAME: $(AZURE_AD_B2C_USERNAME)
@@ -61,11 +62,6 @@ steps:
     CI: 'true'
     # Debug logging
     DEBUG: 'pw:api'
-
-# Debug step to check variable value
-- script: |
-    echo "AUTH_SUCCEEDED value: $(authStep.AUTH_SUCCEEDED)"
-  displayName: 'Debug Auth Variable'
 
 # Capture and publish auth artifacts even if auth fails
 - task: PublishPipelineArtifact@1
@@ -121,11 +117,22 @@ steps:
     CI: 'true'
   continueOnError: true
 
+# Check if auth marker file exists before running authenticated tests
+- script: |
+    if exist auth_success.marker (
+      echo "Auth marker file exists, proceeding with authenticated tests"
+      echo ##vso[task.setvariable variable=runAuthTests]true
+    ) else (
+      echo "Auth marker file does not exist, skipping authenticated tests"
+      echo ##vso[task.setvariable variable=runAuthTests]false
+    )
+  displayName: 'Check Auth Status'
+
 # Only run authenticated tests if auth setup succeeded
 - script: |
     npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=chrome-authenticated
   displayName: 'Run Chrome Dashboard Tests'
-  condition: and(succeeded(), eq(variables['authStep.AUTH_SUCCEEDED'], 'true'))
+  condition: eq(variables['runAuthTests'], 'true')
   env:
     AZURE_AD_B2C_USERNAME: $(AZURE_AD_B2C_USERNAME)
     AZURE_AD_B2C_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
@@ -135,7 +142,7 @@ steps:
 - script: |
     npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=edge-authenticated
   displayName: 'Run Edge Dashboard Tests'
-  condition: and(succeeded(), eq(variables['authStep.AUTH_SUCCEEDED'], 'true'))
+  condition: eq(variables['runAuthTests'], 'true')
   env:
     AZURE_AD_B2C_USERNAME: $(AZURE_AD_B2C_USERNAME)
     AZURE_AD_B2C_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
@@ -145,7 +152,7 @@ steps:
 - script: |
     npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=firefox-authenticated
   displayName: 'Run Firefox Dashboard Tests'
-  condition: and(succeeded(), eq(variables['authStep.AUTH_SUCCEEDED'], 'true'))
+  condition: eq(variables['runAuthTests'], 'true')
   env:
     AZURE_AD_B2C_USERNAME: $(AZURE_AD_B2C_USERNAME)
     AZURE_AD_B2C_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
@@ -155,7 +162,7 @@ steps:
 - script: |
     npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=webkit-authenticated
   displayName: 'Run WebKit Dashboard Tests'
-  condition: and(succeeded(), eq(variables['authStep.AUTH_SUCCEEDED'], 'true'))
+  condition: eq(variables['runAuthTests'], 'true')
   env:
     AZURE_AD_B2C_USERNAME: $(AZURE_AD_B2C_USERNAME)
     AZURE_AD_B2C_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
