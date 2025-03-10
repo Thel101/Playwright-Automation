@@ -16,7 +16,7 @@ class LoginPage extends BasePage {
             console.log('Clicking Connect button...');
             await this.page.waitForSelector(this.selectors.connectButton, { timeout: 60000 });
             await this.page.locator(this.selectors.connectButton).click();
-            await this.page.waitForLoadState('networkidle', { timeout: 60000 });
+            await this.page.waitForLoadState('networkidle', { timeout: 120000 });
             
             // Step 2: Wait for and fill in email
             console.log('Entering username...');
