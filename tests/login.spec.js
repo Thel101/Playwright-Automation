@@ -1,17 +1,18 @@
 const { test, expect } = require('@playwright/test');
 const LoginPage = require('./pageObjects/LoginPage');
-const TestHelpers = require('./utils/testHelpers');
+const testData = require('./testData/loginData.json');
+
+// Login tests should only run in unauthenticated project
+test.use({ project: 'unauthenticated' });
 
 test.describe('Azure AD B2C Authentication', () => {
     let loginPage;
-    let testData;
 
     test('should handle both valid and invalid login attempts', async ({ page, context }) => {
         // Enable console logging for debugging
         page.on('console', msg => console.log(msg.text()));
         
         loginPage = new LoginPage(page);
-        testData = await TestHelpers.loadTestData('loginData.json');
 
         // Test invalid login first
         console.log('Starting invalid login test...');
@@ -48,8 +49,8 @@ test.describe('Azure AD B2C Authentication', () => {
             await page.waitForLoadState('networkidle');
             
             await loginPage.login(testData.validUser.username, testData.validUser.password);
-            // After successful login, we should be redirected to the dashboard
-            await expect(page).toHaveURL(testData.urls.expectedDashboardUrl);
+            // After successful login, we should be redirected to the home page
+            await expect(page).toHaveURL(testData.urls.expectedHomeUrl);
             console.log('Valid login test completed successfully');
         } catch (error) {
             console.error('Valid login test failed:', error);

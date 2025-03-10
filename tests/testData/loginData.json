@@ -9,6 +9,6 @@
     },
     "urls": {
         "baseUrl": "https://compliancerdev.auditmypayroll.com.au",
-        "expectedDashboardUrl": "https://compliancerdev.auditmypayroll.com.au/home"
+        "expectedHomeUrl": "https://compliancerdev.auditmypayroll.com.au/home"
     }
 }
