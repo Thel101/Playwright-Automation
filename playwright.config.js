@@ -3,30 +3,49 @@ const { defineConfig, devices } = require('@playwright/test');
 
 module.exports = defineConfig({
   testDir: './tests',
-  timeout: 120000,
+  timeout: 120000, // Match your Azure AD B2C extended timeout
   expect: {
     timeout: 30000
   },
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: 0,
-  workers: 4,
-  reporter: 'html',
+  retries: process.env.CI ? 1 : 0,
+  workers: 1,
+  reporter: [
+    ['list'],
+    ['html'],
+    ['junit', { 
+      outputFile: 'test-results/junit-results.xml',
+      embedAnnotationsAsProperties: true,
+      attachmentsAnnotationPattern: '.*'
+    }]
+  ],
   use: {
     baseURL: 'https://compliancerdev.auditmypayroll.com.au',
-    trace: 'on',
-    video: 'on',
-    screenshot: 'on',
-    headless: false,
+    trace: 'retain-on-failure',
+    video: 'retain-on-failure',
+    screenshot: 'only-on-failure',
+    headless: process.env.CI ? true : false,
     viewport: { width: 1280, height: 720 },
     actionTimeout: 30000,
-    navigationTimeout: 60000
+    navigationTimeout: 60000,  // Match your Azure AD B2C navigation timeout
+    testIdAttribute: 'data-testid'
   },
   projects: [
     {
       name: 'setup',
       testMatch: /global\.setup\.js/,
       use: { ...devices['Desktop Chrome'] }
+    },
+    {
+      name: 'unauthenticated',  // For login tests
+      testMatch: /login\.spec\.js/,
+      use: { 
+        ...devices['Desktop Chrome'],
+        launchOptions: {
+          args: ['--start-maximized']
+        }
+      }
     },
     {
       name: 'chrome-authenticated',
@@ -75,46 +94,6 @@ module.exports = defineConfig({
       use: { 
         ...devices['Desktop Safari'],
         storageState: 'auth.json',
-        launchOptions: {
-          args: ['--start-maximized']
-        }
-      },
-    },
-    {
-      name: 'chrome',
-      testMatch: /login\.spec\.js/,
-      use: { 
-        ...devices['Desktop Chrome'],
-        launchOptions: {
-          args: ['--start-maximized']
-        }
-      },
-    },
-    {
-      name: 'edge',
-      testMatch: /login\.spec\.js/,
-      use: { 
-        ...devices['Desktop Edge'],
-        launchOptions: {
-          args: ['--start-maximized']
-        }
-      },
-    },
-    {
-      name: 'firefox',
-      testMatch: /login\.spec\.js/,
-      use: { 
-        ...devices['Desktop Firefox'],
-        launchOptions: {
-          args: ['--start-maximized']
-        }
-      },
-    },
-    {
-      name: 'webkit',
-      testMatch: /login\.spec\.js/,
-      use: { 
-        ...devices['Desktop Safari'],
         launchOptions: {
           args: ['--start-maximized']
         }

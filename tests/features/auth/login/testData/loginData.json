@@ -1,0 +1,24 @@
+{
+    "urls": {
+        "baseUrl": "https://compliancerdev.auditmypayroll.com.au",
+        "expectedHomeUrl": "https://compliancerdev.auditmypayroll.com.au/home"
+    },
+    "elements": {
+        "connectButton": "button:has-text(\"Connect\")",
+        "emailInput": "#email",
+        "passwordInput": "#password",
+        "submitButton": "[type=\"submit\"]",
+        "errorMessage": ".error-message"
+    },
+    "validUser": {
+        "username": "bryanevh+kubosuper@gmail.com",
+        "password": "8h+#haH9L]zd65v"
+    },
+    "invalidUser": {
+        "username": "invalid@auditmypayroll.com.au",
+        "password": "WrongPassword123"
+    },
+    "expectedErrors": {
+        "invalidCredentials": "incorrect password"
+    }
+}
