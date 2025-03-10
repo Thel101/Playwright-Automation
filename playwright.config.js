@@ -33,8 +33,15 @@ module.exports = defineConfig({
     testIdAttribute: 'data-testid'
   },
   projects: [
+    // Setup project for generating auth state
     {
-      name: 'unauthenticated',  // For login tests
+      name: 'setup',
+      testMatch: /global\.setup\.js/
+    },
+
+    // Unauthenticated projects for login tests
+    {
+      name: 'chrome-unauthenticated',
       testMatch: /login\.spec\.js/,
       use: { 
         ...devices['Desktop Chrome'],
@@ -45,10 +52,40 @@ module.exports = defineConfig({
       }
     },
     {
-      name: 'setup',
-      testMatch: /global\.setup\.js/,
-      use: { ...devices['Desktop Chrome'] }
+      name: 'edge-unauthenticated',
+      testMatch: /login\.spec\.js/,
+      use: { 
+        ...devices['Desktop Edge'],
+        storageState: { cookies: [], origins: [] },
+        launchOptions: {
+          args: ['--start-maximized']
+        }
+      }
     },
+    {
+      name: 'firefox-unauthenticated',
+      testMatch: /login\.spec\.js/,
+      use: { 
+        ...devices['Desktop Firefox'],
+        storageState: { cookies: [], origins: [] },
+        launchOptions: {
+          args: ['--start-maximized']
+        }
+      }
+    },
+    {
+      name: 'webkit-unauthenticated',
+      testMatch: /login\.spec\.js/,
+      use: { 
+        ...devices['Desktop Safari'],
+        storageState: { cookies: [], origins: [] },
+        launchOptions: {
+          args: ['--start-maximized']
+        }
+      }
+    },
+
+    // Authenticated projects for all other tests
     {
       name: 'chrome-authenticated',
       dependencies: ['setup'],
@@ -60,7 +97,46 @@ module.exports = defineConfig({
         launchOptions: {
           args: ['--start-maximized']
         }
-      },
+      }
+    },
+    {
+      name: 'edge-authenticated',
+      dependencies: ['setup'],
+      testMatch: /.*\.spec\.js/,
+      testIgnore: /login\.spec\.js/,
+      use: { 
+        ...devices['Desktop Edge'],
+        storageState: 'auth.json',
+        launchOptions: {
+          args: ['--start-maximized']
+        }
+      }
+    },
+    {
+      name: 'firefox-authenticated',
+      dependencies: ['setup'],
+      testMatch: /.*\.spec\.js/,
+      testIgnore: /login\.spec\.js/,
+      use: { 
+        ...devices['Desktop Firefox'],
+        storageState: 'auth.json',
+        launchOptions: {
+          args: ['--start-maximized']
+        }
+      }
+    },
+    {
+      name: 'webkit-authenticated',
+      dependencies: ['setup'],
+      testMatch: /.*\.spec\.js/,
+      testIgnore: /login\.spec\.js/,
+      use: { 
+        ...devices['Desktop Safari'],
+        storageState: 'auth.json',
+        launchOptions: {
+          args: ['--start-maximized']
+        }
+      }
     }
-  ],
+  ]
 });
