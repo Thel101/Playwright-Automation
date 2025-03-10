@@ -1,10 +1,16 @@
+require('dotenv').config();
 const { test, expect } = require('@playwright/test');
 const LoginPage = require('./pageObjects/LoginPage');
 const testData = require('./testData/loginData.json');
 
+
 // Login tests should only run in unauthenticated project
 test.use({ project: 'unauthenticated' });
-
+// Debug environment variables  
+console.log('Environment variables:', {  
+    username: process.env.AZURE_AD_B2C_USERNAME ? 'exists' : 'missing',  
+    password: process.env.AZURE_AD_B2C_PASSWORD ? 'exists' : 'missing'  
+});
 test.describe('Azure AD B2C Login', () => {
     let loginPage;
 
@@ -69,7 +75,7 @@ test.describe('Azure AD B2C Login', () => {
         
         try {
             console.log('Starting valid login test...');
-            await loginPage.login(testData.validUser.username, testData.validUser.password);
+            await loginPage.login(process.env.AZURE_AD_B2C_USERNAME, process.env.AZURE_AD_B2C_PASSWORD);
             
             // Verify successful login
             await expect(page).toHaveURL(testData.urls.expectedHomeUrl);

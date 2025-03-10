@@ -1,32 +1,41 @@
-const { test: setup } = require('@playwright/test');
+require('dotenv').config();
+const { test: setup, expect } = require('@playwright/test');
 const LoginPage = require('./features/auth/login/pageObjects/LoginPage');
 const testData = require('./features/auth/login/testData/loginData.json');
 
-setup('authenticate', async ({ page, context }) => {
+
+
+setup('Setting up Authenticate', async ({ page }) => {
     const loginPage = new LoginPage(page);
     
-    console.log('Starting authentication setup...');
-    
     try {
-        // Navigate to the base URL
+        console.log('Starting authentication setup...');
         await page.goto(testData.urls.baseUrl);
-        await page.waitForLoadState('networkidle');
+        console.log('Environment variables loaded:', {  
+            username: process.env.AZURE_AD_B2C_USERNAME ? 'exists' : 'missing',  
+            password: process.env.AZURE_AD_B2C_PASSWORD ? 'exists' : 'missing'  
+        });
+        // Wait for and click Connect button
+        console.log('Clicking Connect button...');
+        await page.waitForSelector('button:has-text("Connect")', { timeout: 30000 });
+        await page.click('button:has-text("Connect")');
         
-        // Perform login with Azure AD B2C flow
-        await loginPage.login(testData.validUser.username, testData.validUser.password);
+        // Handle Azure AD B2C login flow
+        console.log('Starting Azure AD B2C login...');
+        await loginPage.login(process.env.AZURE_AD_B2C_USERNAME, process.env.AZURE_AD_B2C_PASSWORD);
         
-        // Wait for successful login and navigation
-        console.log('Waiting for successful login...');
-        await page.waitForURL(testData.urls.expectedHomeUrl);
-        await page.waitForLoadState('networkidle');
+        // Verify successful login
+        console.log('Verifying successful login...');
+        await expect(page).toHaveURL(testData.urls.expectedHomeUrl, { timeout: 60000 });
         
+        // Save authentication state
         console.log('Saving authentication state...');
-        // Save signed-in state to 'auth.json'
-        await context.storageState({ path: 'auth.json' });
-        console.log('Authentication state saved successfully');
+        await page.context().storageState({ path: 'auth.json' });
+        
+        console.log('Authentication setup completed successfully');
     } catch (error) {
         console.error('Authentication setup failed:', error);
-        await page.screenshot({ path: 'tests/screenshots/auth-setup-error.png', fullPage: true });
+        await page.screenshot({ path: 'auth-setup-error.png', fullPage: true });
         throw error;
     }
 });

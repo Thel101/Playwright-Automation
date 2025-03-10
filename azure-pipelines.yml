@@ -5,7 +5,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  - group: playwright-variables # Create this in Azure DevOps Library
+  - group: playwright-variables # Contains Azure AD B2C credentials
 
 steps:
 - task: NodeTool@0
@@ -15,22 +15,48 @@ steps:
 
 - script: |
     npm ci
-    npx playwright install --with-deps
-  displayName: 'Install dependencies and browsers'
+  displayName: 'Install dependencies'
+
+# Install browsers with system dependencies for authentication
+- script: |
+    npx playwright install --with-deps chromium
+  displayName: 'Install Chromium for auth setup'
 
 - script: |
-    npx playwright test tests/global.setup.js --project=setup
+    npx playwright test tests/global.setup.js --project=setup --headed
   displayName: 'Run Authentication Setup'
   env:
-    TEST_USERNAME: $(AZURE_AD_B2C_USERNAME)  # From Azure DevOps Library
-    TEST_PASSWORD: $(AZURE_AD_B2C_PASSWORD)  # From Azure DevOps Library
+    # Azure AD B2C credentials from variable group
+    TEST_USERNAME: $(AZURE_AD_B2C_USERNAME)
+    TEST_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
+    # Extended timeouts for Azure AD B2C navigation
+    PLAYWRIGHT_TIMEOUT: 120000
+    PLAYWRIGHT_NAVIGATION_TIMEOUT: 60000
+
+# Install remaining browsers after auth setup
+- script: |
+    npx playwright install firefox webkit msedge
+  displayName: 'Install remaining browsers'
 
 - script: |
-    npx playwright test
-  displayName: 'Run Playwright Tests'
+    npx playwright test tests/features/auth/login/login.spec.js --project=chrome-unauthenticated
+    npx playwright test tests/features/auth/login/login.spec.js --project=edge-unauthenticated
+    npx playwright test tests/features/auth/login/login.spec.js --project=firefox-unauthenticated
+    npx playwright test tests/features/auth/login/login.spec.js --project=webkit-unauthenticated
+  displayName: 'Run Login Tests'
   env:
-    TEST_USERNAME: $(AZURE_AD_B2C_USERNAME)  # From Azure DevOps Library
-    TEST_PASSWORD: $(AZURE_AD_B2C_PASSWORD)  # From Azure DevOps Library
+    TEST_USERNAME: $(AZURE_AD_B2C_USERNAME)
+    TEST_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
+
+- script: |
+    npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=chrome-authenticated
+    npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=edge-authenticated
+    npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=firefox-authenticated
+    npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=webkit-authenticated
+  displayName: 'Run Dashboard Tests'
+  env:
+    TEST_USERNAME: $(AZURE_AD_B2C_USERNAME)
+    TEST_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
 
 - task: PublishTestResults@2
   condition: always()
@@ -38,33 +64,10 @@ steps:
     testRunner: JUnit
     testResultsFiles: 'test-results/junit-report.xml'
     testRunTitle: 'Playwright Tests'
+    testRunSystem: 'Azure Pipelines'
+    buildConfiguration: 'Playwright'
+    mergeTestResults: true
     failTaskOnFailedTests: true
-  displayName: 'Publish JUnit Results'
-
-# Publish test results to Test Plans using service connection
-- task: PublishToAzureTestPlans@4
-  condition: always()
-  inputs:
-    testRunner: 'JUnit'
-    testResultsFiles: 'test-results/junit-report.xml'
-    testPlanId: $(TEST_PLAN_ID)
-    testSuite: '$(System.TeamProject)'
-    testConfigurations: |
-      - Chrome
-      - Edge
-      - Firefox
-      - Safari
-    connectedServiceName: 'TestPlansConnection'  # Your service connection name
-    publishTestAttachments: true
-    failTaskOnFailedTests: true
-  displayName: 'Publish to Azure Test Plans'
-
-- task: PublishPipelineArtifact@1
-  condition: always()
-  inputs:
-    targetPath: '$(System.DefaultWorkingDirectory)/test-results'
-    artifact: 'test-results'
-    publishLocation: 'pipeline'
   displayName: 'Publish Test Results'
 
 - task: PublishPipelineArtifact@1

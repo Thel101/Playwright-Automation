@@ -8,11 +8,14 @@
         "emailInput": "#email",
         "passwordInput": "#password",
         "submitButton": "[type=\"submit\"]",
-        "errorMessage": ".error-message"
-    },
-    "validUser": {
-        "username": "bryanevh+kubosuper@gmail.com",
-        "password": "8h+#haH9L]zd65v"
+        "errorMessage": [  
+            "text=We can't seem to find your account", 
+            "div[role=\"alert\"]",
+            "text=incorrect password",
+            "text=Your password is incorrect",
+            "#error_message",
+            ".error-text"
+        ]
     },
     "invalidUser": {
         "username": "invalid@auditmypayroll.com.au",

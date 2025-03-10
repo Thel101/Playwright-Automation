@@ -19,8 +19,7 @@ module.exports = defineConfig({
       outputFile: 'test-results/junit-report.xml',
       embedAnnotationsAsProperties: true,
       attachmentsAnnotationPattern: '.*'
-    }],
-    ['@playwright/test-reporter-azurepipelines']
+    }]
   ],
   use: {
     baseURL: 'https://compliancerdev.auditmypayroll.com.au',
@@ -28,13 +27,18 @@ module.exports = defineConfig({
     video: 'on-first-retry',
     screenshot: 'only-on-failure',
     headless: process.env.CI ? true : false,
-    viewport: { width: 1280, height: 720 }
+    viewport: { width: 1280, height: 720 },
+    actionTimeout: 30000,
+    navigationTimeout: 60000
   },
   projects: [
     // Setup project for generating auth state
     {
       name: 'setup',
-      testMatch: /global\.setup\.js/
+      testMatch: /global\.setup\.js/,
+      use: {
+        ...devices['Desktop Chrome']
+      }
     },
 
     // Unauthenticated projects for login tests
@@ -53,6 +57,7 @@ module.exports = defineConfig({
       name: 'edge-unauthenticated',
       testMatch: /login\.spec\.js/,
       use: { 
+        channel: 'msedge',
         ...devices['Desktop Edge'],
         storageState: { cookies: [], origins: [] },
         launchOptions: {
@@ -103,6 +108,7 @@ module.exports = defineConfig({
       testMatch: /.*\.spec\.js/,
       testIgnore: /login\.spec\.js/,
       use: { 
+        channel: 'msedge',
         ...devices['Desktop Edge'],
         storageState: 'auth.json',
         launchOptions: {
