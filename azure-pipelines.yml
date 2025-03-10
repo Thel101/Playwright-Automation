@@ -5,7 +5,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  - group: playwright-variables # Create this in Azure DevOps Library
+  - group: playwright-variables # Contains Azure AD B2C credentials
 
 steps:
 - task: NodeTool@0
@@ -22,15 +22,15 @@ steps:
     npx playwright test tests/global.setup.js --project=setup
   displayName: 'Run Authentication Setup'
   env:
-    TEST_USERNAME: $(AZURE_AD_B2C_USERNAME)  # From Azure DevOps Library
-    TEST_PASSWORD: $(AZURE_AD_B2C_PASSWORD)  # From Azure DevOps Library
+    TEST_USERNAME: $(AZURE_AD_B2C_USERNAME)
+    TEST_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
 
 - script: |
     npx playwright test
   displayName: 'Run Playwright Tests'
   env:
-    TEST_USERNAME: $(AZURE_AD_B2C_USERNAME)  # From Azure DevOps Library
-    TEST_PASSWORD: $(AZURE_AD_B2C_PASSWORD)  # From Azure DevOps Library
+    TEST_USERNAME: $(AZURE_AD_B2C_USERNAME)
+    TEST_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
 
 - task: PublishTestResults@2
   condition: always()
@@ -38,33 +38,10 @@ steps:
     testRunner: JUnit
     testResultsFiles: 'test-results/junit-report.xml'
     testRunTitle: 'Playwright Tests'
+    testRunSystem: 'Azure Pipelines'
+    buildConfiguration: 'Playwright'
+    mergeTestResults: true
     failTaskOnFailedTests: true
-  displayName: 'Publish JUnit Results'
-
-# Publish test results to Test Plans using service connection
-- task: PublishToAzureTestPlans@4
-  condition: always()
-  inputs:
-    testRunner: 'JUnit'
-    testResultsFiles: 'test-results/junit-report.xml'
-    testPlanId: $(TEST_PLAN_ID)
-    testSuite: '$(System.TeamProject)'
-    testConfigurations: |
-      - Chrome
-      - Edge
-      - Firefox
-      - Safari
-    connectedServiceName: 'TestPlansConnection'  # Your service connection name
-    publishTestAttachments: true
-    failTaskOnFailedTests: true
-  displayName: 'Publish to Azure Test Plans'
-
-- task: PublishPipelineArtifact@1
-  condition: always()
-  inputs:
-    targetPath: '$(System.DefaultWorkingDirectory)/test-results'
-    artifact: 'test-results'
-    publishLocation: 'pipeline'
   displayName: 'Publish Test Results'
 
 - task: PublishPipelineArtifact@1
