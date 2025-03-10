@@ -55,7 +55,7 @@ steps:
 
 # Install remaining browsers after auth setup
 - script: |
-    npx playwright install firefox webkit msedge
+    npx playwright install firefox webkit
   displayName: 'Install remaining browsers'
   condition: succeeded()
 
