@@ -24,11 +24,25 @@ steps:
     npx playwright install --with-deps chromium
   displayName: 'Install Chromium for auth setup'
 
+# Create screenshots directory
+- script: |
+    mkdir screenshots
+  displayName: 'Create screenshots directory'
+  failOnStderr: false
+
 # Run authentication setup with improved debugging and parameters
 - script: |
     npx playwright test tests/global.setup.js --project=setup --headed --timeout=180000
     if exist auth.json (
-      echo "##vso[task.setvariable variable=authSucceeded]true"
+      echo ##vso[task.setvariable variable=authSucceeded]true
+    )
+    
+    REM Copy any screenshots to the screenshots directory
+    if exist auth-setup-error.png (
+      copy auth-setup-error.png screenshots\
+    )
+    if exist post-login-state.png (
+      copy post-login-state.png screenshots\
     )
   displayName: 'Run Authentication Setup'
   env:
@@ -47,7 +61,7 @@ steps:
 - task: PublishPipelineArtifact@1
   condition: always()
   inputs:
-    targetPath: '$(System.DefaultWorkingDirectory)/*.png'
+    targetPath: '$(Build.SourcesDirectory)/screenshots'
     artifact: 'auth-debug-screenshots'
     publishLocation: 'pipeline'
   displayName: 'Publish Auth Debug Screenshots'
@@ -55,7 +69,7 @@ steps:
 
 # Install remaining browsers after auth setup
 - script: |
-    npx playwright install firefox webkit
+    npx playwright install firefox webkit msedge
   displayName: 'Install remaining browsers'
   condition: succeeded()
 
@@ -148,7 +162,7 @@ steps:
   condition: always()
   inputs:
     testRunner: JUnit
-    testResultsFiles: 'test-results/junit-report.xml'
+    testResultsFiles: '$(Build.SourcesDirectory)/test-results/junit-report.xml'
     testRunTitle: 'Playwright Tests'
     testRunSystem: 'Azure Pipelines'
     buildConfiguration: 'Playwright'
@@ -160,18 +174,18 @@ steps:
 - task: PublishPipelineArtifact@1
   condition: always()
   inputs:
-    targetPath: '$(System.DefaultWorkingDirectory)/playwright-report'
+    targetPath: '$(Build.SourcesDirectory)/playwright-report'
     artifact: 'playwright-report'
     publishLocation: 'pipeline'
   displayName: 'Publish HTML Report'
   continueOnError: true
 
-# Publish all screenshots for debugging
+# Publish test-results directory
 - task: PublishPipelineArtifact@1
   condition: always()
   inputs:
-    targetPath: '$(System.DefaultWorkingDirectory)/**/*.png'
-    artifact: 'test-screenshots'
+    targetPath: '$(Build.SourcesDirectory)/test-results'
+    artifact: 'test-results'
     publishLocation: 'pipeline'
-  displayName: 'Publish Test Screenshots'
+  displayName: 'Publish Test Results Directory'
   continueOnError: true
