@@ -1,0 +1,18 @@
+{
+    "urls": {
+        "baseUrl": "https://compliancerdev.auditmypayroll.com.au",
+        "expectedDashboardUrl": "https://compliancerdev.auditmypayroll.com.au/dashboard"
+    },
+    "elements": {
+        "navigation": {
+            "mainNav": "nav.main-navigation",
+            "userProfile": "[data-testid='user-profile']",
+            "logoutButton": "[data-testid='logout-button']",
+            "settingsButton": "[data-testid='settings-button']"
+        },
+        "content": {
+            "mainContent": "[data-testid='dashboard-content']",
+            "welcomeMessage": "[data-testid='welcome-message']"
+        }
+    }
+}

@@ -1,9 +1,9 @@
-const LoginPage = require('../pageObjects/LoginPage');
+const LoginPage = require('../features/auth/login/pageObjects/LoginPage');
+const testData = require('../features/auth/login/testData.json');
 
 class AuthHelper {
     static async loginAndSaveState(page, context) {
         const loginPage = new LoginPage(page);
-        const testData = require('../testData/loginData.json');
         
         console.log('Starting authentication setup...');
         
@@ -16,7 +16,7 @@ class AuthHelper {
         await page.waitForURL(testData.urls.expectedHomeUrl);
         
         // Wait for any additional session data to be set
-        await page.waitForLoadState('networkidle');
+        //await page.waitForLoadState('networkidle'); <-- takes too long
         
         console.log('Saving authentication state...');
         // Save signed-in state to 'auth.json'
