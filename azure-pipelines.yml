@@ -5,26 +5,13 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  npm_config_cache: $(Pipeline.Workspace)/.npm
-  # Use pipeline variables instead of environment variables
-  # Configure these in Azure DevOps Pipeline settings:
-  # AZURE_PAT: $(AUTOMATION_PAT)  # Marked as secret
-  # TEST_PLAN_ID: 3161
-  # PROJECT_NAME: Board
+  - group: playwright-variables # Create this in Azure DevOps Library
 
 steps:
 - task: NodeTool@0
   inputs:
     versionSpec: '18.x'
   displayName: 'Install Node.js'
-
-- task: Cache@2
-  inputs:
-    key: 'npm | "$(Agent.OS)" | package-lock.json'
-    restoreKeys: |
-      npm | "$(Agent.OS)"
-    path: $(npm_config_cache)
-  displayName: Cache npm packages
 
 - script: |
     npm ci
@@ -35,48 +22,55 @@ steps:
     npx playwright test tests/global.setup.js --project=setup
   displayName: 'Run Authentication Setup'
   env:
-    CI: 'true'
+    TEST_USERNAME: $(AZURE_AD_B2C_USERNAME)  # From Azure DevOps Library
+    TEST_PASSWORD: $(AZURE_AD_B2C_PASSWORD)  # From Azure DevOps Library
 
 - script: |
     npx playwright test
   displayName: 'Run Playwright Tests'
   env:
-    CI: 'true'
+    TEST_USERNAME: $(AZURE_AD_B2C_USERNAME)  # From Azure DevOps Library
+    TEST_PASSWORD: $(AZURE_AD_B2C_PASSWORD)  # From Azure DevOps Library
 
 - task: PublishTestResults@2
+  condition: always()
   inputs:
     testRunner: JUnit
-    testResultsFiles: 'test-results/junit-results.xml'
+    testResultsFiles: 'test-results/junit-report.xml'
     testRunTitle: 'Playwright Tests'
     failTaskOnFailedTests: true
-  condition: succeededOrFailed()
+  displayName: 'Publish JUnit Results'
 
-# Publish test results to Test Plans using generic service connection
+# Publish test results to Test Plans using service connection
 - task: PublishToAzureTestPlans@4
+  condition: always()
   inputs:
     testRunner: 'JUnit'
-    testResultsFiles: 'test-results/junit-results.xml'
-    testPlanId: '3161'
+    testResultsFiles: 'test-results/junit-report.xml'
+    testPlanId: $(TEST_PLAN_ID)
     testSuite: '$(System.TeamProject)'
     testConfigurations: |
       - Chrome
       - Edge
       - Firefox
       - Safari
-    connectedServiceName: 'TestPlansConnection'  # Use your generic service connection name
+    connectedServiceName: 'TestPlansConnection'  # Your service connection name
+    publishTestAttachments: true
     failTaskOnFailedTests: true
-  condition: succeededOrFailed()
+  displayName: 'Publish to Azure Test Plans'
 
 - task: PublishPipelineArtifact@1
-  condition: succeededOrFailed()
-  inputs:
-    targetPath: '$(System.DefaultWorkingDirectory)/playwright-report'
-    artifact: 'playwright-report'
-    publishLocation: 'pipeline'
-
-- task: PublishPipelineArtifact@1
-  condition: failed()
+  condition: always()
   inputs:
     targetPath: '$(System.DefaultWorkingDirectory)/test-results'
     artifact: 'test-results'
     publishLocation: 'pipeline'
+  displayName: 'Publish Test Results'
+
+- task: PublishPipelineArtifact@1
+  condition: always()
+  inputs:
+    targetPath: '$(System.DefaultWorkingDirectory)/playwright-report'
+    artifact: 'playwright-report'
+    publishLocation: 'pipeline'
+  displayName: 'Publish HTML Report'

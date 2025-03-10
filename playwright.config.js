@@ -4,7 +4,7 @@ require('dotenv').config();
 
 module.exports = defineConfig({
   testDir: './tests',
-  timeout: 120000, // Match your Azure AD B2C extended timeout
+  timeout: 120000,
   expect: {
     timeout: 30000
   },
@@ -19,7 +19,8 @@ module.exports = defineConfig({
       outputFile: 'test-results/junit-report.xml',
       embedAnnotationsAsProperties: true,
       attachmentsAnnotationPattern: '.*'
-    }]
+    }],
+    ['@playwright/test-reporter-azurepipelines']
   ],
   use: {
     baseURL: 'https://compliancerdev.auditmypayroll.com.au',
@@ -27,10 +28,7 @@ module.exports = defineConfig({
     video: 'on-first-retry',
     screenshot: 'only-on-failure',
     headless: process.env.CI ? true : false,
-    viewport: { width: 1280, height: 720 },
-    actionTimeout: 30000,
-    navigationTimeout: 60000,  // Match your Azure AD B2C navigation timeout
-    testIdAttribute: 'data-testid'
+    viewport: { width: 1280, height: 720 }
   },
   projects: [
     // Setup project for generating auth state
