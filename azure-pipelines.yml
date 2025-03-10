@@ -6,6 +6,8 @@ pool:
 
 variables:
   - group: playwright-variables # Contains Azure AD B2C credentials
+  - name: authSucceeded
+    value: false
 
 steps:
 - task: NodeTool@0
@@ -25,6 +27,9 @@ steps:
 # Run authentication setup with improved debugging and parameters
 - script: |
     npx playwright test tests/global.setup.js --project=setup --headed --timeout=180000
+    if exist auth.json (
+      echo "##vso[task.setvariable variable=authSucceeded]true"
+    )
   displayName: 'Run Authentication Setup'
   env:
     # Azure AD B2C credentials from variable group
@@ -42,7 +47,7 @@ steps:
 - task: PublishPipelineArtifact@1
   condition: always()
   inputs:
-    targetPath: '$(System.DefaultWorkingDirectory)/auth-setup-error.png'
+    targetPath: '$(System.DefaultWorkingDirectory)/*.png'
     artifact: 'auth-debug-screenshots'
     publishLocation: 'pipeline'
   displayName: 'Publish Auth Debug Screenshots'
@@ -95,7 +100,7 @@ steps:
 - script: |
     npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=chrome-authenticated
   displayName: 'Run Chrome Dashboard Tests'
-  condition: and(succeeded(), exists('auth.json'))
+  condition: and(succeeded(), eq(variables.authSucceeded, 'true'))
   env:
     AZURE_AD_B2C_USERNAME: $(AZURE_AD_B2C_USERNAME)
     AZURE_AD_B2C_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
@@ -105,7 +110,7 @@ steps:
 - script: |
     npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=edge-authenticated
   displayName: 'Run Edge Dashboard Tests'
-  condition: and(succeeded(), exists('auth.json'))
+  condition: and(succeeded(), eq(variables.authSucceeded, 'true'))
   env:
     AZURE_AD_B2C_USERNAME: $(AZURE_AD_B2C_USERNAME)
     AZURE_AD_B2C_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
@@ -115,7 +120,7 @@ steps:
 - script: |
     npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=firefox-authenticated
   displayName: 'Run Firefox Dashboard Tests'
-  condition: and(succeeded(), exists('auth.json'))
+  condition: and(succeeded(), eq(variables.authSucceeded, 'true'))
   env:
     AZURE_AD_B2C_USERNAME: $(AZURE_AD_B2C_USERNAME)
     AZURE_AD_B2C_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
@@ -125,7 +130,7 @@ steps:
 - script: |
     npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=webkit-authenticated
   displayName: 'Run WebKit Dashboard Tests'
-  condition: and(succeeded(), exists('auth.json'))
+  condition: and(succeeded(), eq(variables.authSucceeded, 'true'))
   env:
     AZURE_AD_B2C_USERNAME: $(AZURE_AD_B2C_USERNAME)
     AZURE_AD_B2C_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
@@ -137,6 +142,7 @@ steps:
     npx playwright merge-reports --reporter=junit,html ./test-results
   displayName: 'Merge Test Reports'
   condition: always()
+  continueOnError: true
 
 - task: PublishTestResults@2
   condition: always()
@@ -149,6 +155,7 @@ steps:
     mergeTestResults: true
     failTaskOnFailedTests: false
   displayName: 'Publish Test Results'
+  continueOnError: true
 
 - task: PublishPipelineArtifact@1
   condition: always()
@@ -157,6 +164,7 @@ steps:
     artifact: 'playwright-report'
     publishLocation: 'pipeline'
   displayName: 'Publish HTML Report'
+  continueOnError: true
 
 # Publish all screenshots for debugging
 - task: PublishPipelineArtifact@1
