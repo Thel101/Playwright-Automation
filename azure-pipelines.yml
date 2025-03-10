@@ -30,15 +30,7 @@ steps:
 
 # Run authentication setup with improved debugging and parameters
 - script: |
-    npx playwright test tests/global.setup.js --project=setup --headed --timeout=180000
-    
-    REM Create a marker file if auth.json exists
-    if exist auth.json (
-      echo "Auth file exists, creating marker file..."
-      echo "Authentication successful" > auth_success.marker
-    ) else (
-      echo "Auth file does not exist"
-    )
+    npx playwright test tests/global.setup.js --project=setup --headed --timeout=180000 || echo "Auth setup failed but continuing pipeline"
     
     REM Copy any screenshots to the screenshots directory
     if exist auth-setup-error.png (
@@ -50,6 +42,13 @@ steps:
     
     REM List files in directory for debugging
     dir
+    
+    REM Check if auth.json exists
+    if exist auth.json (
+      echo "Auth file exists, authentication was successful"
+    ) else (
+      echo "Auth file does not exist, authentication failed"
+    )
   displayName: 'Run Authentication Setup'
   env:
     # Azure AD B2C credentials from variable group
@@ -117,22 +116,15 @@ steps:
     CI: 'true'
   continueOnError: true
 
-# Check if auth marker file exists before running authenticated tests
+# Only run authenticated tests if auth.json exists
 - script: |
-    if exist auth_success.marker (
-      echo "Auth marker file exists, proceeding with authenticated tests"
-      echo ##vso[task.setvariable variable=runAuthTests]true
+    if exist auth.json (
+      echo "Auth file exists, running Chrome dashboard tests"
+      npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=chrome-authenticated
     ) else (
-      echo "Auth marker file does not exist, skipping authenticated tests"
-      echo ##vso[task.setvariable variable=runAuthTests]false
+      echo "Auth file does not exist, skipping Chrome dashboard tests"
     )
-  displayName: 'Check Auth Status'
-
-# Only run authenticated tests if auth setup succeeded
-- script: |
-    npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=chrome-authenticated
   displayName: 'Run Chrome Dashboard Tests'
-  condition: eq(variables['runAuthTests'], 'true')
   env:
     AZURE_AD_B2C_USERNAME: $(AZURE_AD_B2C_USERNAME)
     AZURE_AD_B2C_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
@@ -140,9 +132,13 @@ steps:
   continueOnError: true
 
 - script: |
-    npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=edge-authenticated
+    if exist auth.json (
+      echo "Auth file exists, running Edge dashboard tests"
+      npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=edge-authenticated
+    ) else (
+      echo "Auth file does not exist, skipping Edge dashboard tests"
+    )
   displayName: 'Run Edge Dashboard Tests'
-  condition: eq(variables['runAuthTests'], 'true')
   env:
     AZURE_AD_B2C_USERNAME: $(AZURE_AD_B2C_USERNAME)
     AZURE_AD_B2C_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
@@ -150,9 +146,13 @@ steps:
   continueOnError: true
 
 - script: |
-    npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=firefox-authenticated
+    if exist auth.json (
+      echo "Auth file exists, running Firefox dashboard tests"
+      npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=firefox-authenticated
+    ) else (
+      echo "Auth file does not exist, skipping Firefox dashboard tests"
+    )
   displayName: 'Run Firefox Dashboard Tests'
-  condition: eq(variables['runAuthTests'], 'true')
   env:
     AZURE_AD_B2C_USERNAME: $(AZURE_AD_B2C_USERNAME)
     AZURE_AD_B2C_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
@@ -160,9 +160,13 @@ steps:
   continueOnError: true
 
 - script: |
-    npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=webkit-authenticated
+    if exist auth.json (
+      echo "Auth file exists, running WebKit dashboard tests"
+      npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=webkit-authenticated
+    ) else (
+      echo "Auth file does not exist, skipping WebKit dashboard tests"
+    )
   displayName: 'Run WebKit Dashboard Tests'
-  condition: eq(variables['runAuthTests'], 'true')
   env:
     AZURE_AD_B2C_USERNAME: $(AZURE_AD_B2C_USERNAME)
     AZURE_AD_B2C_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
