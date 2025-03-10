@@ -7,10 +7,10 @@ module.exports = defineConfig({
   expect: {
     timeout: 30000
   },
-  fullyParallel: false,
+  fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: 0,
-  workers: 1,
+  workers: 4,
   reporter: 'html',
   use: {
     baseURL: 'https://compliancerdev.auditmypayroll.com.au',
@@ -25,13 +25,14 @@ module.exports = defineConfig({
   projects: [
     {
       name: 'setup',
-      testMatch: /global\.setup\.js/
+      testMatch: /global\.setup\.js/,
+      use: { ...devices['Desktop Chrome'] }
     },
     {
-      name: 'authenticated',
+      name: 'chrome-authenticated',
       dependencies: ['setup'],
       testMatch: /.*\.spec\.js/,
-      testIgnore: /login\.spec\.js/,  // Ignore login tests for authenticated project
+      testIgnore: /login\.spec\.js/,
       use: { 
         ...devices['Desktop Chrome'],
         storageState: 'auth.json',
@@ -41,10 +42,79 @@ module.exports = defineConfig({
       },
     },
     {
-      name: 'unauthenticated',
-      testMatch: /login\.spec\.js/,  // Only run login tests in unauthenticated project
+      name: 'edge-authenticated',
+      dependencies: ['setup'],
+      testMatch: /.*\.spec\.js/,
+      testIgnore: /login\.spec\.js/,
+      use: { 
+        ...devices['Desktop Edge'],
+        storageState: 'auth.json',
+        launchOptions: {
+          args: ['--start-maximized']
+        }
+      },
+    },
+    {
+      name: 'firefox-authenticated',
+      dependencies: ['setup'],
+      testMatch: /.*\.spec\.js/,
+      testIgnore: /login\.spec\.js/,
+      use: { 
+        ...devices['Desktop Firefox'],
+        storageState: 'auth.json',
+        launchOptions: {
+          args: ['--start-maximized']
+        }
+      },
+    },
+    {
+      name: 'webkit-authenticated',
+      dependencies: ['setup'],
+      testMatch: /.*\.spec\.js/,
+      testIgnore: /login\.spec\.js/,
+      use: { 
+        ...devices['Desktop Safari'],
+        storageState: 'auth.json',
+        launchOptions: {
+          args: ['--start-maximized']
+        }
+      },
+    },
+    {
+      name: 'chrome',
+      testMatch: /login\.spec\.js/,
       use: { 
         ...devices['Desktop Chrome'],
+        launchOptions: {
+          args: ['--start-maximized']
+        }
+      },
+    },
+    {
+      name: 'edge',
+      testMatch: /login\.spec\.js/,
+      use: { 
+        ...devices['Desktop Edge'],
+        launchOptions: {
+          args: ['--start-maximized']
+        }
+      },
+    },
+    {
+      name: 'firefox',
+      testMatch: /login\.spec\.js/,
+      use: { 
+        ...devices['Desktop Firefox'],
+        launchOptions: {
+          args: ['--start-maximized']
+        }
+      },
+    },
+    {
+      name: 'webkit',
+      testMatch: /login\.spec\.js/,
+      use: { 
+        ...devices['Desktop Safari'],
         launchOptions: {
           args: ['--start-maximized']
         }
