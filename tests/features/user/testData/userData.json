@@ -1,0 +1,27 @@
+{
+    "urls": {
+        "baseUrl": "https://compliancerdev.auditmypayroll.com.au",
+        "adminUrl": "https://compliancerdev.auditmypayroll.com.au/admin",
+        "userListUrl": "https://compliancerdev.auditmypayroll.com.au/users",
+        "createUserUrl": "https://compliancerdev.auditmypayroll.com.au/createuserdetail"
+    },
+    "elements": {
+        "adminMenu": "a.menu-list[href='/admin']",
+        "adminPageTitle" : "h1.main-title",
+        "adminPageSubTitle" : "div.user-manage-subtitle",
+        "submenu": "div.user-manage-setting",
+        "userManagementMenu": "div.user-title:has-text('User Management')",
+        "userList" : "table tbody", 
+        "createUserButton": "a[href='/createuserdetail']",
+        "createUserPageTitle": "h1.main-title",
+        "companyName": "div:has-text('Company Name')",
+        "userRole": "div:has-text('User Role')",
+        "name": "input#full-name-input",
+        "position": "input#position-input",
+        "email": "input#email-address-input",
+        "editButton" : "a[href='/edituserdetail']",
+        "userStatus" : "div:has-text('Status')"
+    }
+
+
+}

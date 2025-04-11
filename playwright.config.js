@@ -1,5 +1,7 @@
 // @ts-check
+// @ts-ignore
 const { defineConfig, devices } = require('@playwright/test');
+// @ts-ignore
 require('dotenv').config();
 
 module.exports = defineConfig({
@@ -9,7 +11,9 @@ module.exports = defineConfig({
     timeout: 30000
   },
   fullyParallel: true,
+  // @ts-ignore
   forbidOnly: !!process.env.CI,
+  // @ts-ignore
   retries: process.env.CI ? 1 : 0,
   workers: 1,
   reporter: [
@@ -26,6 +30,7 @@ module.exports = defineConfig({
     trace: 'on-first-retry',
     video: 'on-first-retry',
     screenshot: 'only-on-failure',
+    // @ts-ignore
     headless: process.env.CI ? true : false,
     viewport: { width: 1280, height: 720 },
     actionTimeout: 30000,

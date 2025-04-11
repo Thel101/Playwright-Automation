@@ -1,0 +1,22 @@
+{
+    "urls":{
+        "baseUrl":"https://compliancerdev.auditmypayroll.com.au/",
+        "companyList" : "https://compliancerdev.auditmypayroll.com.au/companies",
+        "createCompany" : "https://compliancerdev.auditmypayroll.com.au/managecompanydetail"
+    },
+    "elements" : {
+        "companyList" : {
+            "title" : "h1.main-title",
+            "tableHeader" : "table thead",
+            "tableBody" : "table tbody",
+            "createButton" : "a:has-text('Create Company')"
+        },
+        "createCompany" : {
+            "title" : "h1.main-title",
+            "section" : "h3.sub-title",
+            "businessName" : "input#CompanyName",
+            "legalName" : "input#legalName",
+            "createButton" : "button:has-text('Create')"
+        }
+    }
+}
