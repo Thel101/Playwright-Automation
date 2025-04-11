@@ -5,7 +5,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  - group: playwright-variables # Contains Azure AD B2C credentials
+  - group: playwright-variables - qa # Contains Azure AD B2C credentials
 
 steps:
 - task: NodeTool@0
