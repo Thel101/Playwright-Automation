@@ -79,7 +79,6 @@ test.describe('Azure AD B2C Login', () => {
             
             // Verify successful login
             await expect(page).toHaveURL(testData.urls.expectedHomeUrl);
-            
             console.log('Valid login test completed successfully');
         } catch (error) {
             console.error('Valid login test failed:', error);

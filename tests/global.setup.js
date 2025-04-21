@@ -76,7 +76,12 @@ setup('Setting up Authenticate', async ({ page }) => {
         
         // Save authentication state
         console.log('Saving authentication state...');
+       
         await page.context().storageState({ path: 'auth.json' });
+
+        // await page.evaluate(() => {
+        //     localStorage.clear(); // Clear local storage if needed
+        // });
         
         console.log('Authentication setup completed successfully');
     } catch (error) {
