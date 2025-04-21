@@ -52,12 +52,12 @@ class LoginPage extends BasePage {
             throw error;
         }
     }
-    async getApiData() {
-        if (!this.apiData) {
-            throw new Error('API data is not available. Please call login() first.');   
-        }
-        return this.apiData;
-    }
+    // async getApiData() {
+    //     if (!this.apiData) {
+    //         throw new Error('API data is not available. Please call login() first.');   
+    //     }
+    //     return this.apiData;
+    // }
 
     // Add this method to your LoginPage class
     async loginWithExtendedTimeouts(username, password) {
