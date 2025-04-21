@@ -194,19 +194,6 @@ steps:
   condition: always()
   continueOnError: true
 
-- task: PublishTestResults@2
-  condition: always()
-  inputs:
-    testRunner: JUnit
-    testResultsFiles: '$(Build.SourcesDirectory)/test-results/junit-report.xml'
-    testRunTitle: 'Playwright Tests'
-    # testRunSystem: 'Azure Pipelines'
-    buildConfiguration: 'Playwright'
-    mergeTestResults: true
-    failTaskOnFailedTests: false
-  displayName: 'Publish Test Results'
-  continueOnError: true
-
 - task: PublishPipelineArtifact@1
   condition: always()
   inputs:
