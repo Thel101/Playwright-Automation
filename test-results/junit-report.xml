@@ -1,6 +1,6 @@
-<testsuites id="" name="" tests="2" failures="1" skipped="0" errors="0" time="155.52927599999998">
-<testsuite name="global.setup.js" timestamp="2025-04-21T07:47:19.645Z" hostname="setup" tests="1" failures="0" skipped="0" time="31.51" errors="0">
-<testcase name="Setting up Authenticate" classname="global.setup.js" time="31.51">
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="176.810203">
+<testsuite name="global.setup.js" timestamp="2025-04-24T05:04:45.649Z" hostname="setup" tests="1" failures="0" skipped="0" time="30.956" errors="0">
+<testcase name="Setting up Authenticate" classname="global.setup.js" time="30.956">
 <system-out>
 <![CDATA[Starting authentication setup...
 Running in pipeline: No
@@ -20,35 +20,8 @@ Authentication setup completed successfully
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="features\company\createCompany.spec.js" timestamp="2025-04-21T07:47:19.645Z" hostname="firefox-authenticated" tests="1" failures="1" skipped="0" time="120.283" errors="0">
-<testcase name="Company List Navigation › should create company with all required data" classname="features\company\createCompany.spec.js" time="120.283">
-<failure message="createCompany.spec.js:17:5 should create company with all required data" type="FAILURE">
-<![CDATA[  [firefox-authenticated] › features\company\createCompany.spec.js:17:5 › Company List Navigation › should create company with all required data 
-
-    Test timeout of 120000ms exceeded.
-
-    Error: locator.click: Test timeout of 120000ms exceeded.
-    Call log:
-      - waiting for locator('div').filter({ hasText: /^Subu$/ }).getByLabel('open combobox')
-
-
-       at features\company\pageObjects\CreateCompanyPage.js:69
-
-      67 |         await this.page.getByRole('textbox', { name: 'Street Address' }).fill('Testing Street');
-      68 |
-    > 69 |         await this.page.locator('div').filter({ hasText: /^Subu$/ }).getByLabel('open combobox').click();
-         |                                                                                                  ^
-      70 |         await this.page.waitForSelector(this.createElements.suburbDropdown);
-      71 |         const option = await this.page.waitForSelector('div[role="option"] >> text="Aarons Pass"');
-      72 |         await option.click();
-        at CreateCompanyPage.fillBusinessAddress (D:\Automation Playwright-1\tests\features\company\pageObjects\CreateCompanyPage.js:69:98)
-        at D:\Automation Playwright-1\tests\features\company\createCompany.spec.js:22:9
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results\features-company-createCom-5b2b3-pany-with-all-required-data-firefox-authenticated\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
+<testsuite name="features\company\createCompany.spec.js" timestamp="2025-04-24T05:04:45.649Z" hostname="chrome-authenticated" tests="2" failures="0" skipped="0" time="142.909" errors="0">
+<testcase name="Company List Navigation › should create company with all required data" classname="features\company\createCompany.spec.js" time="85.707">
 <system-out>
 <![CDATA[Navigated to company list page.
 Clicking create company button...
@@ -56,8 +29,25 @@ Clicked create company button
 Filling company details...
 Company details filled successfully.
 Filling business address...
-
-[[ATTACHMENT|features-company-createCom-5b2b3-pany-with-all-required-data-firefox-authenticated\test-failed-1.png]]
+Business address filled successfully.
+Contact details filled successfully.
+Payroll industry information filled successfully.
+Billing information filled successfully.
+Subscription information filled successfully.
+]]>
+</system-out>
+</testcase>
+<testcase name="Company List Navigation › check created company" classname="features\company\createCompany.spec.js" time="57.202">
+<system-out>
+<![CDATA[Logged out successfully.
+Starting Azure AD B2C login flow...
+Clicking Connect button...
+Entering username...
+Entering password...
+Submitting login form...
+Login flow completed
+Navigating to user list...
+New user created successfully.
 ]]>
 </system-out>
 </testcase>

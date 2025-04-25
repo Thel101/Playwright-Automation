@@ -47,34 +47,31 @@ class createUserPage extends BasePage {
     }
   
 
-    async createNewUser() {
+    async createNewUser(company, selectedRole, responsiblity, position, email) {
         const companyName = this.page.locator(this.selectors.companyName);
         await companyName.getByRole('button', { name: 'open combobox' }).nth(0).click();
-        await companyName.getByRole('option', { name: 'Pkyaw Company' }).click();
+        await companyName.getByRole('option', { name: `${company}` }).click();
        
         const userRole = this.page.locator(this.selectors.userRole);
         await userRole.getByRole('button', { name: 'open combobox' }).nth(1).click();
-        await userRole.getByRole('option', { name: 'Basic User' }).click();
+        await userRole.getByRole('option', { name: `${selectedRole}` }).click();
        
     
         await this.page.getByRole('img', { name: 'Close' }).click();
     
         await this.page.getByPlaceholder('Select one or more options').click();
-        await this.page.getByRole('option', { name: 'CTO', exact: true }).click();
+        await this.page.getByRole('option', { name: `${responsiblity}`, exact: true }).click();
     
         const username = "Phyu"
         await this.page.locator(this.selectors.name).fill(username)
     
-        await this.page.locator(this.selectors.position).fill("QA");
+        await this.page.locator(this.selectors.position).fill(`${position}`);
 
-        const email = "jopa5853@movfull.com"
         await this.page.locator(this.selectors.email).fill(email);
     
-        // await this.page.getByRole('button', { name: 'Create' }).click()
+        await this.page.getByRole('button', { name: 'Create' }).click()
     
-        // await expect (page.locator('h1.popup-title')).toHaveText('Success')
-        // await expect (page.locator('p.popup-message')).toHaveText(`The user - ${username} has been successfully created.`)
-        // await this.page.getByRole('button', { name: 'OK' }).click()
+        await this.page.getByRole('button', { name: 'OK' }).click()
     
     }
 

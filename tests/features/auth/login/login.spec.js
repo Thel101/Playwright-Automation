@@ -19,7 +19,7 @@ test.describe('Azure AD B2C Login', () => {
         await page.goto(testData.urls.baseUrl);
     });
 
-    test('should display error for invalid login @TC3162', async ({ page }) => {
+    test('[3491] should display error for invalid login', async ({ page }) => {
         test.info().annotations.push({
             type: 'testCaseId',
             description: '3162'
@@ -67,7 +67,7 @@ test.describe('Azure AD B2C Login', () => {
         }
     });
 
-    test('should successfully login with valid credentials @TC3163', async ({ page }) => {
+    test('[3492] should successfully login with valid credentials', async ({ page }) => {
         test.info().annotations.push({
             type: 'testCaseId',
             description: '3163'

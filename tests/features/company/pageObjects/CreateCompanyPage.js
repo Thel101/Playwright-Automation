@@ -45,9 +45,9 @@ class CreateCompanyPage extends BasePage {
         console.log('Clicked create company button');
     }
 
-    async fillCompanyDetails() {
+    async fillCompanyDetails(companyName) {
         console.log('Filling company details...');
-        await this.page.getByRole('textbox', { name: 'e.g. AMP Corporation', exact: true }).fill('21April Testing Company 3');
+        await this.page.getByRole('textbox', { name: 'e.g. AMP Corporation', exact: true }).fill(companyName);
         await this.page.getByRole('checkbox', { name: 'Same as business name' }).check();
 
         const inputs = this.page.locator('xpath=//*[@id[starts-with(., "input-")]]');
@@ -60,33 +60,33 @@ class CreateCompanyPage extends BasePage {
 
     }
 
-    async fillBusinessAddress() {
+    async fillBusinessAddress(streetName, suburbName, stateName, postalCode, additionalAddress) {
         console.log('Filling business address...');
         await this.page.waitForLoadState('networkidle', { timeout: 60000 });
 
-        await this.page.getByRole('textbox', { name: 'Street Address' }).fill('Testing Street');
+        await this.page.getByRole('textbox', { name: 'Street Address' }).fill(streetName);
 
         await this.page.locator('div').filter({ hasText: /^Suburb$/ }).getByLabel('open combobox').click();
         await this.page.waitForSelector(this.createElements.suburbDropdown);
-        const option = await this.page.waitForSelector('div[role="option"] >> text="Aarons Pass"');
+        const option = await this.page.locator(`div[role="option"] >> text="${suburbName}"`);
         await option.click();
 
-        await this.enterDropdownValue(this.createElements.stateComboList, 'New South Wales');
+        await this.enterDropdownValue(this.createElements.stateComboList, `${stateName}`);
 
-        await this.enterDropdownValue(this.createElements.postcodeComboList, '2850');
+        await this.enterDropdownValue(this.createElements.postcodeComboList, `${postalCode}`);
 
-        await this.page.getByRole('textbox', { name: 'e.g. Suite 101, Building A,' }).fill('building three');
+        await this.page.getByRole('textbox', { name: 'e.g. Suite 101, Building A,' }).fill(`${additionalAddress}`);
 
 
     }
-    async fillContactDetails() {
-        await this.page.locator(this.createElements.contactName).fill('Phyu');
+    async fillContactDetails(name, email, position, phone) {
+        await this.page.locator(this.createElements.contactName).fill(`${name}`);
 
-        await this.page.locator(this.createElements.contactEmail).fill('phyu42264@gmail.com');
+        await this.page.locator(this.createElements.contactEmail).fill(`${email}`);
 
-        await this.page.locator(this.createElements.contactPosition).fill('QA');
+        await this.page.locator(this.createElements.contactPosition).fill(`${position}`);
 
-        await this.page.locator(this.createElements.contactPhone).fill('089876655');
+        await this.page.locator(this.createElements.contactPhone).fill(`${phone}`);
     }
     async fillPayrollIndustryInformation() {
 
@@ -129,7 +129,8 @@ class CreateCompanyPage extends BasePage {
         await this.enterDropdownValue(this.createElements.subscriptionDuration, 'Monthly'); // Fill the input to trigger the dropdown
 
         await this.page.getByRole('textbox', { name: 'Start Date' }).click();
-        await this.page.getByRole('option', { name: 'Choose Wednesday, April 23rd,' }).click();
+        await this.page.getByRole('option', { name: 'Choose Wednesday, April 16th,' }).click();
+        await this.page.locator('input[type="checkbox"][name="CreateCustomerUserWithContactInfo"]').check();
 
         await this.page.getByRole('button', { name: 'Create' }).click();
         await this.page.getByRole('button', { name: 'OK' }).click();

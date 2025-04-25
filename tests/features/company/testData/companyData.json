@@ -35,5 +35,11 @@
             "subscriptionDuration" : "#subscription-duration-combobox_input"
 
         }
+    },
+    "account" : {
+        "name" : "Phyu",
+        "email" : "phyu42264@gmail.com",
+        "phone" : "0422 222 222",
+        "role" : "QA"
     }
 }

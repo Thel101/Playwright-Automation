@@ -46,18 +46,19 @@ class LoginPage extends BasePage {
             this.apiData = data; // <- store it here!
           
             console.log('Login flow completed');
+            // This is a no-op, but it can be useful for debugging
         } catch (error) {
             console.error('Login flow failed:', error);
             await this.page.screenshot({ path: 'tests/features/auth/login/screenshots/login-flow-error.png', fullPage: true });
             throw error;
         }
     }
-    // async getApiData() {
-    //     if (!this.apiData) {
-    //         throw new Error('API data is not available. Please call login() first.');   
-    //     }
-    //     return this.apiData;
-    // }
+    async getApiData() {
+        if (!this.apiData) {
+            throw new Error('API data is not available. Please call login() first.');   
+        }
+        return this.apiData;
+    }
 
     // Add this method to your LoginPage class
     async loginWithExtendedTimeouts(username, password) {
