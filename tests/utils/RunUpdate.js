@@ -1,4 +1,4 @@
-import { updateTestCaseStatusInTestPlan } from '../../src/utils/Common';
+import { updateTestCaseStatusInTestPlan } from '../utils/Common.js';
 
 async function run() {
   try {
