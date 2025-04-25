@@ -188,7 +188,7 @@ steps:
   continueOnError: true
 
 - script: |
-    npx ts-node src/utils/RunUpdate.ts
+    node src/utils/RunUpdate.js
   displayName: "Update Test Plan Test Case Status"
   condition: always()
 
