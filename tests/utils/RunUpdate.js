@@ -1,4 +1,4 @@
-import { updateTestCaseStatusInTestPlan } from '../utils/Common.js';
+const { updateTestCaseStatusInTestPlan } = require('../utils/Common.js');
 
 async function run() {
   try {
