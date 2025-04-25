@@ -1,8 +1,8 @@
-import { request, expect } from '@playwright/test';
-import dotenv from 'dotenv';
+const { request, expect } = require ('@playwright/test');
+const dotenv = require('dotenv');
 dotenv.config();
 
-import axios from 'axios';
+const axios = require('axios');
 
 const credentials = Buffer.from(`${process.env.AZURE_DEVOPS_USER}:${process.env.AZURE_DEVOPS_PASS}`).to('base64');
 
@@ -76,4 +76,4 @@ class AzureDevOps {
     }
 }
 
-export default AzureDevOps;
+module.exports = AzureDevOps;

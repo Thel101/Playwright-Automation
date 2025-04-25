@@ -1,8 +1,8 @@
-import { Page } from '@playwright/test';
-import AzureDevOps from '../../src/utils/AzureDevOpsHelper';
-import * as fs from 'fs';
+const { Page } = require ('@playwright/test');
+const AzureDevOps = require ('../utils/AzureDevlopsHelper.js');
+const fs = require ('fs');
 
-import dotenv from 'dotenv';
+const dotenv = require('dotenv');
 dotenv.config();
 
 async function readJsonReport() {
@@ -41,6 +41,10 @@ async function readJsonReport() {
         console.log('Update test plan or pipeline conditions not met.');
     }
 }
-export async function updateTestCaseStatusInTestPlan() {
+async function updateTestCaseStatusInTestPlan() {
     await readJsonReport();
 }
+
+module.exports = {
+    updateTestCaseStatusInTestPlan
+};
