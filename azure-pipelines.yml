@@ -187,11 +187,6 @@ steps:
 #     CI: 'true'
 #   continueOnError: true
 
-- script: |
-    node tests/utils/RunUpdate.js
-  displayName: "Update Test Plan Test Case Status"
-  condition: always()
-
 # Generate and publish test reports
 - script: |
     npx playwright merge-reports --reporter=junit,html ./test-results
@@ -199,6 +194,11 @@ steps:
   condition: always()
   continueOnError: true
 
+- script: |
+    node update-test-results.js
+  env:
+    AZURE_PAT: $(AZURE_PAT) 
+  displayName: 'Upload Playwright test results to Azure DevOps Test Plans'
 
 - task: PublishTestResults@2
   condition: always()
