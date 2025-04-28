@@ -199,6 +199,7 @@ steps:
   env:
     AZURE_PAT: $(AZURE_PAT) 
   displayName: 'Upload Playwright test results to Azure DevOps Test Plans'
+  continueOnError: true
 
 - task: PublishTestResults@2
   condition: always()
