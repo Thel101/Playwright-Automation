@@ -1,8 +1,8 @@
 {
     "urls":{
-        "baseUrl":"https://compliancerdev.auditmypayroll.com.au/",
-        "companyList" : "https://compliancerdev.auditmypayroll.com.au/companies",
-        "createCompany" : "https://compliancerdev.auditmypayroll.com.au/managecompanydetail"
+        "baseUrl":"https://app-dev.auditmypayroll.com.au/",
+        "companyList" : "https://app-dev.auditmypayroll.com.au/companies",
+        "createCompany" : "https://app-dev.auditmypayroll.com.au/managecompanydetail"
     },
     "elements" : {
         "companyList" : {

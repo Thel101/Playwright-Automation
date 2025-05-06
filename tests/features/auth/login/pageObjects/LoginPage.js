@@ -39,7 +39,7 @@ class LoginPage extends BasePage {
             await this.page.waitForLoadState('networkidle', { timeout: 60000 });
             const [response] = await Promise.all([
                 this.page.waitForResponse((resp) =>
-                    resp.url().includes('https://compliancerapidev.auditmypayroll.com.au/api/locations/suburbs') && resp.status() === 200),
+                    resp.url().includes('https://dev-compliancer-app-service-1.azurewebsites.net/api/locations/suburbs') && resp.status() === 200),
             ]);
 
             const data = await response.json();

@@ -1,6 +1,6 @@
-<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="176.810203">
-<testsuite name="global.setup.js" timestamp="2025-04-24T05:04:45.649Z" hostname="setup" tests="1" failures="0" skipped="0" time="30.956" errors="0">
-<testcase name="Setting up Authenticate" classname="global.setup.js" time="30.956">
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="38.539762">
+<testsuite name="global.setup.js" timestamp="2025-05-06T09:54:33.348Z" hostname="setup" tests="1" failures="0" skipped="0" time="14.38" errors="0">
+<testcase name="Setting up Authenticate" classname="global.setup.js" time="14.38">
 <system-out>
 <![CDATA[Starting authentication setup...
 Running in pipeline: No
@@ -12,44 +12,16 @@ Entering password...
 Submitting login form...
 Login flow completed
 Verifying successful login...
-Current URL: https://compliancerdev.auditmypayroll.com.au/home
-Expected URL: https://compliancerdev.auditmypayroll.com.au/home
+Current URL: https://app-dev.auditmypayroll.com.au/home
+Expected URL: https://app-dev.auditmypayroll.com.au/home
 Saving authentication state...
 Authentication setup completed successfully
 ]]>
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="features\company\createCompany.spec.js" timestamp="2025-04-24T05:04:45.649Z" hostname="chrome-authenticated" tests="2" failures="0" skipped="0" time="142.909" errors="0">
-<testcase name="Company List Navigation › should create company with all required data" classname="features\company\createCompany.spec.js" time="85.707">
-<system-out>
-<![CDATA[Navigated to company list page.
-Clicking create company button...
-Clicked create company button
-Filling company details...
-Company details filled successfully.
-Filling business address...
-Business address filled successfully.
-Contact details filled successfully.
-Payroll industry information filled successfully.
-Billing information filled successfully.
-Subscription information filled successfully.
-]]>
-</system-out>
-</testcase>
-<testcase name="Company List Navigation › check created company" classname="features\company\createCompany.spec.js" time="57.202">
-<system-out>
-<![CDATA[Logged out successfully.
-Starting Azure AD B2C login flow...
-Clicking Connect button...
-Entering username...
-Entering password...
-Submitting login form...
-Login flow completed
-Navigating to user list...
-New user created successfully.
-]]>
-</system-out>
+<testsuite name="features\compliancer\completeAssessment.spec.js" timestamp="2025-05-06T09:54:33.348Z" hostname="chrome-authenticated" tests="1" failures="0" skipped="0" time="21.434" errors="0">
+<testcase name="Complete assessment › complete assessment for people pillar" classname="features\compliancer\completeAssessment.spec.js" time="21.434">
 </testcase>
 </testsuite>
 </testsuites>

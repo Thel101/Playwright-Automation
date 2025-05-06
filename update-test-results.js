@@ -1,58 +1,100 @@
+// // Config
+// const AZURE_ORG = '';
+// const AZURE_PROJECT = '';
+// const TEST_PLAN_ID = 3489;
+// const TEST_SUITE_ID = 3490;
+// const AZURE_PAT = ''; 
+// const MAPPING_FILE = './mapping.json';
+// const TEST_RESULTS_FILE = 'test-results/junit-report.xml';
+
 const fs = require('fs');
 const xml2js = require('xml2js');
 const axios = require('axios');
 
-// Config
-const AZURE_ORG = 'auditmypayroll';
-const AZURE_PROJECT = 'Automation Playwright';
-const TEST_PLAN_ID = 3489;
-const TEST_SUITE_ID = 3490;
-const AZURE_PAT = '8Q7TQQzfWeTBOiCdSHCQYYL0LDwbBDsYioNYt5Uvmtx6W1cL4MFuJQQJ99BDACAAAAAK4GPBAAASAZDO22WV'; 
-const MAPPING_FILE = './mapping.json';
-const TEST_RESULTS_FILE = 'test-results/junit-report.xml';
+const organization = 'auditmypayroll';
+const project = 'Automation Playwright';
+const planId = '3489';
+const pat = '8Q7TQQzfWeTBOiCdSHCQYYL0LDwbBDsYioNYt5Uvmtx6W1cL4MFuJQQJ99BDACAAAAAK4GPBAAASAZDO22WV';
 
-const AZURE_API_BASE = `https://dev.azure.com/${AZURE_ORG}/${AZURE_PROJECT}/_apis`;
-const AUTH_HEADER = {
-  Authorization: `Basic ${Buffer.from(`:${AZURE_PAT}`).toString('base64')}`
-};
+const auth = Buffer.from(':' + pat).toString('base64');
 
-(async () => {
-  const testNameToCaseId = JSON.parse(fs.readFileSync(MAPPING_FILE, 'utf8'));
-  const xml = fs.readFileSync(TEST_RESULTS_FILE, 'utf8');
-
-  const parsed = await xml2js.parseStringPromise(xml);
-  const testCases = parsed.testsuite.testcase || [];
-
-  // Step 1: Create test run
-  const createRunResponse = await axios.post(
-    `${AZURE_API_BASE}/test/runs?api-version=7.1-preview.3`,
+async function createTestRun() {
+  const response = await axios.post(
+    `https://dev.azure.com/${organization}/${project}/_apis/test/runs?api-version=7.1-preview.3`,
     {
-      name: `Playwright Test Run - ${new Date().toISOString()}`,
-      plan: { id: TEST_PLAN_ID },
+      name: 'Playwright Automated Run',
+      plan: { id: planId },
       automated: true
     },
-    { headers: AUTH_HEADER }
+    { headers: { Authorization: `Basic ${auth}` } }
   );
+  return response.data.id;
+}
 
-  const runId = createRunResponse.data.id;
-  console.log(`Created Test Run ID: ${runId}`);
-
-  // Step 2: Add results
-  const resultsPayload = testCases
-    .filter(tc => testNameToCaseId[tc.$.name])
-    .map(tc => ({
-      testCase: { id: testNameToCaseId[tc.$.name] },
-      outcome: tc.failure ? 'Failed' : 'Passed',
-      durationInMs: parseInt(tc.$.time || '0') * 1000,
-      automatedTestName: tc.$.name,
-      state: 'Completed'
-    }));
-
-  const resultsResponse = await axios.post(
-    `${AZURE_API_BASE}/test/runs/${runId}/results?api-version=7.1-preview.3`,
-    resultsPayload,
-    { headers: AUTH_HEADER }
+async function addTestResults(runId, results) {
+  await axios.post(
+    `https://dev.azure.com/${organization}/${project}/_apis/test/Runs/${runId}/results?api-version=7.1-preview.3`,
+    results,
+    { headers: { Authorization: `Basic ${auth}` } }
   );
+}
 
-  console.log(`Uploaded ${resultsResponse.data.length} test results to run ${runId}`);
-})();
+async function completeTestRun(runId) {
+  await axios.patch(
+    `https://dev.azure.com/${organization}/${project}/_apis/test/runs/${runId}?api-version=7.1-preview.3`,
+    { state: 'Completed' },
+    { headers: { Authorization: `Basic ${auth}` } }
+  );
+}
+
+function parseTestCaseId(testName) {
+  // Expecting test names like "TC123 - Test login"
+  const match = testName.match(/TC(\d+)/);
+  return match ? match[1] : null;
+}
+
+async function main() {
+  // Step 1: Parse the JUnit XML
+  const xml = fs.readFileSync('test-results/results.xml', 'utf-8');
+  const result = await xml2js.parseStringPromise(xml);
+
+  const testCases = result.testsuites.testsuite[0].testcase;
+
+  const testResults = [];
+
+  for (const test of testCases) {
+    const testName = test.$.name;
+    const caseId = parseTestCaseId(testName);
+
+    if (!caseId) continue; // skip tests without TC id
+
+    const outcome = test.failure ? 'Failed' : 'Passed';
+
+    testResults.push({
+      testCase: { id: caseId },
+      outcome,
+      state: 'Completed',
+      automatedTestName: `TC${caseId}`,
+      automatedTestType: 'Playwright Test'
+    });
+  }
+
+  if (testResults.length === 0) {
+    console.log('No test cases with TC IDs found!');
+    return;
+  }
+
+  // Step 2: Create Test Run
+  const runId = await createTestRun();
+  console.log(`Created Test Run: ${runId}`);
+
+  // Step 3: Add Test Results
+  await addTestResults(runId, testResults);
+  console.log(`Updated ${testResults.length} test results`);
+
+  // Step 4: Complete Run
+  await completeTestRun(runId);
+  console.log(`Test Run ${runId} completed`);
+}
+
+main().catch(console.error);

@@ -1,7 +1,7 @@
 {
     "urls": {
-        "baseUrl": "https://compliancerdev.auditmypayroll.com.au",
-        "expectedHomeUrl": "https://compliancerdev.auditmypayroll.com.au/home"
+        "baseUrl": "https://app-dev.auditmypayroll.com.au/",
+        "expectedHomeUrl": "https://app-dev.auditmypayroll.com.au/home"
     },
     "elements": {
         "connectButton": "button:has-text(\"Connect\")",
