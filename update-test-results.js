@@ -55,7 +55,7 @@ function parseTestCaseId(testName) {
 
 async function main() {
   // Step 1: Parse the JUnit XML
-  const xml = fs.readFileSync('test-results/results.xml', 'utf-8');
+  const xml = fs.readFileSync('test-results/junit-report.xml', 'utf-8');
   const result = await xml2js.parseStringPromise(xml);
 
   const testCases = result.testsuites.testsuite[0].testcase;
