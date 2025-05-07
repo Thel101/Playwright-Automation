@@ -98,23 +98,23 @@ steps:
     CI: 'true'
   continueOnError: true
 
-# - script: |
-#     npx playwright test tests/features/auth/login/login.spec.js --project=firefox-unauthenticated
-#   displayName: 'Run Firefox Login Tests'
-#   env:
-#     AZURE_AD_B2C_USERNAME: $(AZURE_AD_B2C_USERNAME)
-#     AZURE_AD_B2C_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
-#     CI: 'true'
-#   continueOnError: true
+- script: |
+    npx playwright test tests/features/auth/login/login.spec.js --project=firefox-unauthenticated
+  displayName: 'Run Firefox Login Tests'
+  env:
+    AZURE_AD_B2C_USERNAME: $(AZURE_AD_B2C_USERNAME)
+    AZURE_AD_B2C_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
+    CI: 'true'
+  continueOnError: true
 
-# - script: |
-#     npx playwright test tests/features/auth/login/login.spec.js --project=webkit-unauthenticated
-#   displayName: 'Run WebKit Login Tests'
-#   env:
-#     AZURE_AD_B2C_USERNAME: $(AZURE_AD_B2C_USERNAME)
-#     AZURE_AD_B2C_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
-#     CI: 'true'
-#   continueOnError: true
+- script: |
+    npx playwright test tests/features/auth/login/login.spec.js --project=webkit-unauthenticated
+  displayName: 'Run WebKit Login Tests'
+  env:
+    AZURE_AD_B2C_USERNAME: $(AZURE_AD_B2C_USERNAME)
+    AZURE_AD_B2C_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
+    CI: 'true'
+  continueOnError: true
 
 # Only run authenticated tests if auth.json exists
 - script: |
