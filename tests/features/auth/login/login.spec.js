@@ -67,7 +67,7 @@ test.describe('Azure AD B2C Login', () => {
         }
     });
 
-    test('TC3492 - should successfully login with valid credentials', async ({ page }) => {
+    test('TC 3492 - should successfully login with valid credentials', async ({ page }) => {
         test.info().annotations.push({
             type: 'testCaseId',
             description: '3163'

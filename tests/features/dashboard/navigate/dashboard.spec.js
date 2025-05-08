@@ -14,7 +14,7 @@ test.describe('Dashboard Navigation', () => {
         await page.waitForLoadState('networkidle');
     });
 
-    test('should load dashboard when authenticated @TC3164', async ({ page }) => {
+    test('TC3492 - should load dashboard when authenticated ', async ({ page }) => {
         test.info().annotations.push({
             type: 'testCaseId',
             description: '3164'

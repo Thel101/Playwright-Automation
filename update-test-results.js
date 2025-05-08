@@ -1,11 +1,3 @@
-// // Config
-// const AZURE_ORG = '';
-// const AZURE_PROJECT = '';
-// const TEST_PLAN_ID = 3489;
-// const TEST_SUITE_ID = 3490;
-// const AZURE_PAT = ''; 
-// const MAPPING_FILE = './mapping.json';
-// const TEST_RESULTS_FILE = 'test-results/junit-report.xml';
 
 const fs = require('fs');
 const xml2js = require('xml2js');
