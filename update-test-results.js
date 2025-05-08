@@ -6,7 +6,7 @@ const axios = require('axios');
 const organization = 'auditmypayroll';
 const project = 'Automation Playwright';
 const planId = '3489';
-const pat = 'ENJHRF7TdZcixCop9n5MKJjkUhEybkfNJwrezurdiLGdWT4Wf4l4JQQJ99BEACAAAAAK4GPBAAASAZDO2Uwr';
+const pat = '8Q7TQQzfWeTBOiCdSHCQYYL0LDwbBDsYioNYt5Uvmtx6W1cL4MFuJQQJ99BDACAAAAAK4GPBAAASAZDO22WV';
 
 const auth = Buffer.from(':' + pat).toString('base64');
 
@@ -24,11 +24,17 @@ async function createTestRun() {
 }
 
 async function addTestResults(runId, results) {
-  await axios.post(
-    `https://dev.azure.com/${organization}/${project}/_apis/test/Runs/${runId}/results?api-version=7.1-preview.3`,
-    results,
-    { headers: { Authorization: `Basic ${auth}` } }
-  );
+  try {
+    await axios.post(
+      `https://dev.azure.com/${organization}/${project}/_apis/test/Runs/${runId}/results?api-version=7.1-preview.3`,
+      results,
+      { headers: { Authorization: `Basic ${auth}` } }
+    );
+  }
+  catch (error) {
+    console.error('Error adding test results:', error.response ? error.response.data : error.message);
+    throw error; // Re-throw the error to be caught in the main function
+  }
 }
 
 async function completeTestRun(runId) {
