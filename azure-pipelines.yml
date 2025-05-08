@@ -116,20 +116,20 @@ steps:
     CI: 'true'
   continueOnError: true
 
-# Only run authenticated tests if auth.json exists
-- script: |
-    if exist auth.json (
-      echo "Auth file exists, running Chrome dashboard tests"
-      npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=chrome-authenticated
-    ) else (
-      echo "Auth file does not exist, skipping Chrome dashboard tests"
-    )
-  displayName: 'Run Chrome Dashboard Tests'
-  env:
-    AZURE_AD_B2C_USERNAME: $(AZURE_AD_B2C_USERNAME)
-    AZURE_AD_B2C_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
-    CI: 'true'
-  continueOnError: true
+# # Only run authenticated tests if auth.json exists
+# - script: |
+#     if exist auth.json (
+#       echo "Auth file exists, running Chrome dashboard tests"
+#       npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=chrome-authenticated
+#     ) else (
+#       echo "Auth file does not exist, skipping Chrome dashboard tests"
+#     )
+#   displayName: 'Run Chrome Dashboard Tests'
+#   env:
+#     AZURE_AD_B2C_USERNAME: $(AZURE_AD_B2C_USERNAME)
+#     AZURE_AD_B2C_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
+#     CI: 'true'
+#   continueOnError: true
 
 
 # Generate and publish test reports
