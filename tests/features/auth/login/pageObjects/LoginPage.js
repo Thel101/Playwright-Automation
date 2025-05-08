@@ -36,14 +36,14 @@ class LoginPage extends BasePage {
             await this.page.locator(this.selectors.submitButton).click();
 
             // Step 5: Wait for navigation to complete
-            await this.page.waitForLoadState('networkidle', { timeout: 60000 });
-            const [response] = await Promise.all([
-                this.page.waitForResponse((resp) =>
-                    resp.url().includes('https://dev-compliancer-app-service-1.azurewebsites.net/api/locations/suburbs') && resp.status() === 200),
-            ]);
+            // await this.page.waitForLoadState('networkidle', { timeout: 60000 });
+            // const [response] = await Promise.all([
+            //     this.page.waitForResponse((resp) =>
+            //         resp.url().includes('https://dev-compliancer-app-service-1.azurewebsites.net/api/locations/suburbs') && resp.status() === 200),
+            // ]);
 
-            const data = await response.json();
-            this.apiData = data; // <- store it here!
+            // const data = await response.json();
+            // this.apiData = data; // <- store it here!
           
             console.log('Login flow completed');
             // This is a no-op, but it can be useful for debugging

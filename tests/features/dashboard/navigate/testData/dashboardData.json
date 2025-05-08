@@ -1,8 +1,8 @@
 {
     "urls": {
-        "baseUrl": "https://compliancerdev.auditmypayroll.com.au",      
-        "expectedDashboardUrl": "https://compliancerdev.auditmypayroll.com.au/dashboard",
-        "expectedSettingsUrl": "https://compliancerdev.auditmypayroll.com.au/settings"
+        "baseUrl": "https://app-dev.auditmypayroll.com.au/",      
+        "expectedDashboardUrl": "https://app-dev.auditmypayroll.com.au/dashboard",
+        "expectedSettingsUrl": "https://app-dev.auditmypayroll.com.au/settings"
     },
     "elements": {
         "navigation": {
