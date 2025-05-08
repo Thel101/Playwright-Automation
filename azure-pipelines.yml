@@ -134,10 +134,11 @@ steps:
 
 # Generate and publish test reports
 - script: |
-    npx playwright merge-reports --reporter=junit,html ./test-results
+    npx playwright merge-reports --reporter=junit --reporter=html ./test-results
   displayName: 'Merge Test Reports'
   condition: always()
   continueOnError: true
+
 
 - script: |
     npx playwright test --reporter=junit:test-results/junit-report.xml
