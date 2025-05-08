@@ -3,7 +3,7 @@ const { test: setup, expect } = require('@playwright/test');
 const LoginPage = require('./features/auth/login/pageObjects/LoginPage');
 const testData = require('./features/auth/login/testData/loginData.json');
 
-setup('TC3491 - Setting up Authenticate', async ({ page }) => {
+setup('Setting up Authenticate', async ({ page }) => {
     const loginPage = new LoginPage(page);
     
     try {
