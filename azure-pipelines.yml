@@ -131,61 +131,6 @@ steps:
     CI: 'true'
   continueOnError: true
 
-- script: |
-    if exist auth.json (
-      echo "Auth file exists, running Edge dashboard tests"
-      npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=edge-authenticated
-    ) else (
-      echo "Auth file does not exist, skipping Edge dashboard tests"
-    )
-  displayName: 'Run Edge Dashboard Tests'
-  env:
-    AZURE_AD_B2C_USERNAME: $(AZURE_AD_B2C_USERNAME)
-    AZURE_AD_B2C_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
-    CI: 'true'
-  continueOnError: true
-
-- script: |
-    if exist auth.json (
-      echo "Auth file exists, running Firefox dashboard tests"
-      npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=firefox-authenticated
-    ) else (
-      echo "Auth file does not exist, skipping Firefox dashboard tests"
-    )
-  displayName: 'Run Firefox Dashboard Tests'
-  env:
-    AZURE_AD_B2C_USERNAME: $(AZURE_AD_B2C_USERNAME)
-    AZURE_AD_B2C_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
-    CI: 'true'
-  continueOnError: true
-
-- script: |
-    if exist auth.json (
-      echo "Auth file exists, running WebKit dashboard tests"
-      npx playwright test tests/features/dashboard/navigate/dashboard.spec.js --project=webkit-authenticated
-    ) else (
-      echo "Auth file does not exist, skipping WebKit dashboard tests"
-    )
-  displayName: 'Run WebKit Dashboard Tests'
-  env:
-    AZURE_AD_B2C_USERNAME: $(AZURE_AD_B2C_USERNAME)
-    AZURE_AD_B2C_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
-    CI: 'true'
-  continueOnError: true
-
-- script: |
-    if exist auth.json (
-      echo "Auth file exists, running WebKit user tests"
-      npx playwright test tests/features/user/createUser.spec.js --project=chrome-authenticated
-    ) else (
-      echo "Auth file does not exist, skipping Chrome user tests"
-    )
-  displayName: 'Run Chrome User Tests'
-  env:
-    AZURE_AD_B2C_USERNAME: $(AZURE_AD_B2C_USERNAME)
-    AZURE_AD_B2C_PASSWORD: $(AZURE_AD_B2C_PASSWORD)
-    CI: 'true'
-  continueOnError: true
 
 # Generate and publish test reports
 - script: |
@@ -195,7 +140,7 @@ steps:
   continueOnError: true
 
 - script: |
-    npx playwright test --reporter=junit --output=test-results
+    npx playwright test --reporter=junit:test-results/junit-report.xml
   displayName: 'Run Playwright Tests (JUnit Report)'
   condition: always()
   continueOnError: true
@@ -211,7 +156,7 @@ steps:
 - task: PublishTestResults@2
   condition: always()
   inputs:
-    testRunner: JUnit
+    testResultsFormat: 'JUnit'
     testResultsFiles: '$(Build.SourcesDirectory)/test-results/junit-report.xml'
     testRunTitle: 'Playwright Tests'
     testRunSystem: 'Azure Pipelines'
@@ -219,6 +164,7 @@ steps:
     mergeTestResults: true
     failTaskOnFailedTests: false
   displayName: 'Publish Test Results'
+
 
 - task: PublishPipelineArtifact@1
   condition: always()
