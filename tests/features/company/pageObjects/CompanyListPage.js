@@ -26,7 +26,7 @@ class CompanyListPage extends BasePage {
             console.log('Company list loaded successfully');
             return {title, columnHeader, columnCount};
             
-        } catch (error) {
+        } catch (error) {this.selectors.companyList.createButton
             console.error('Failed to load company list:', error);
             await this.page.screenshot({ path: 'tests/features/company/list/screenshots/company-list-load-error.png', fullPage: true });
             throw error;

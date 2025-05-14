@@ -7,7 +7,7 @@ class AuthHelper {
         this.loginPage = new LoginPage(page);
     }
 
-    async login(username = testData.validUser.username, password = testData.validUser.password) {
+    async login(username , password ) {
         console.log('Performing login with AuthHelper...');
         await this.loginPage.login(username, password);
         await this.page.waitForLoadState('networkidle');

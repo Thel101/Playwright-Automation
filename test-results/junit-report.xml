@@ -1,10 +1,11 @@
-<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="38.539762">
-<testsuite name="global.setup.js" timestamp="2025-05-06T09:54:33.348Z" hostname="setup" tests="1" failures="0" skipped="0" time="14.38" errors="0">
-<testcase name="Setting up Authenticate" classname="global.setup.js" time="14.38">
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="44.580449">
+<testsuite name="global.setup.js" timestamp="2025-05-14T09:47:53.806Z" hostname="setup" tests="1" failures="0" skipped="0" time="20.365" errors="0">
+<testcase name="Setting up Authenticate" classname="global.setup.js" time="20.365">
 <system-out>
 <![CDATA[Starting authentication setup...
 Running in pipeline: No
 Using standard authentication flow...
+Logging in as super_user...
 Starting Azure AD B2C login flow...
 Clicking Connect button...
 Entering username...
@@ -12,16 +13,17 @@ Entering password...
 Submitting login form...
 Login flow completed
 Verifying successful login...
-Current URL: https://app-dev.auditmypayroll.com.au/home
-Expected URL: https://app-dev.auditmypayroll.com.au/home
+Current URL: https://app-dev.auditmypayroll.com.au/dashboard
+Expected URL: undefined
 Saving authentication state...
+Authentication state saved to auth-super_user.json
 Authentication setup completed successfully
 ]]>
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="features\compliancer\completeAssessment.spec.js" timestamp="2025-05-06T09:54:33.348Z" hostname="chrome-authenticated" tests="1" failures="0" skipped="0" time="21.434" errors="0">
-<testcase name="Complete assessment › complete assessment for people pillar" classname="features\compliancer\completeAssessment.spec.js" time="21.434">
+<testsuite name="features\compliancer\assessmentFeature.spec.js" timestamp="2025-05-14T09:47:53.806Z" hostname="chrome-authenticated-assessment" tests="1" failures="0" skipped="0" time="17.361" errors="0">
+<testcase name="Assessment feature › Manage assessment" classname="features\compliancer\assessmentFeature.spec.js" time="17.361">
 </testcase>
 </testsuite>
 </testsuites>

@@ -36,15 +36,12 @@ class LoginPage extends BasePage {
             await this.page.locator(this.selectors.submitButton).click();
 
             // Step 5: Wait for navigation to complete
-            // await this.page.waitForLoadState('networkidle', { timeout: 60000 });
-            // const [response] = await Promise.all([
-            //     this.page.waitForResponse((resp) =>
-            //         resp.url().includes('https://dev-compliancer-app-service-1.azurewebsites.net/api/locations/suburbs') && resp.status() === 200),
-            // ]);
-
-            // const data = await response.json();
-            // this.apiData = data; // <- store it here!
-          
+            await this.page.waitForLoadState('networkidle', { timeout: 60000 });
+            const [response] = await Promise.all([
+                this.page.waitForResponse((resp) =>
+                    resp.url().includes('https://dev-compliancer-app-service-1.azurewebsites.net/api/locations/suburbs') && resp.status() === 200),
+            ]);
+            await response.json();
             console.log('Login flow completed');
             // This is a no-op, but it can be useful for debugging
         } catch (error) {
@@ -53,12 +50,30 @@ class LoginPage extends BasePage {
             throw error;
         }
     }
+    async logout() {
+        console.log('Logging out...');
+        try {
+            await this.page.getByText('Logout').click();
+            await this.page.getByRole('button', { name: 'Log Out' }).click();
+            console.log('Logout successful');
+
+        } catch (error) {
+            console.error('Logout failed:', error);
+            await this.page.screenshot({ path: 'tests/features/auth/login/screenshots/logout-error.png', fullPage: true });
+            throw error;
+        }
+    }
+    async enterCompany(companyName) {
+        await this.page.getByRole('cell', { name: `${companyName}` }).click();
+        await this.page.getByRole('button', { name: 'Confirm' }).click();
+    }
     async getApiData() {
         if (!this.apiData) {
-            throw new Error('API data is not available. Please call login() first.');   
+            throw new Error('API data is not available. Please call login() first.');
         }
         return this.apiData;
     }
+
 
     // Add this method to your LoginPage class
     async loginWithExtendedTimeouts(username, password) {

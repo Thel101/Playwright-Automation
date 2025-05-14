@@ -1,25 +1,51 @@
 {
     "urls": {
         "baseUrl": "https://app-dev.auditmypayroll.com.au/",
-        "expectedHomeUrl": "https://app-dev.auditmypayroll.com.au/home"
+        "expectedSuper_userHomeUrl": "https://app-dev.auditmypayroll.com.au/dashboard",
+        "expectedAdminHomeUrl": "https://app-dev.auditmypayroll.com.au/companydirectory",
+        "expectedBasic_userHomeUrl": "https://app-dev.auditmypayroll.com.au/riskassessment"
+    },
+    "roles": {
+        "admin": {
+            "username": "sharedadministratordev@dight.ai",
+            "password": "8h+#haH9L]zd65v"
+        },
+        "super_user": {
+            "username": "pkyaw@dight.ai",
+            "password": "Def@u1tPW"
+        },
+        "basic_user": {
+            "username": "phyusnoe846@gmail.com",
+            "password": "Def@u1tPW"  
+        }    
     },
     "elements": {
         "connectButton": "button:has-text(\"Connect\")",
         "emailInput": "#email",
         "passwordInput": "#password",
         "submitButton": "[type=\"submit\"]",
-        "errorMessage": [  
-            "text=We can't seem to find your account", 
+        "errorMessage": [
+            "text=We can't seem to find your account",
             "div[role=\"alert\"]",
             "text=incorrect password",
             "text=Your password is incorrect",
             "#error_message",
             ".error-text"
-        ]
+        ],
+        "logoutButton": "div:has-text(\"Logout\")",
+        "logoutConfirmButton": "button:has-text(\"Log Out\")"
     },
     "invalidUser": {
         "username": "invalid@auditmypayroll.com.au",
         "password": "WrongPassword123"
+    },
+    "singleSuperUser": {
+        "username": "pkyaw@dight.ai",
+        "password": "Def@u1tPW"
+    },
+    "adminUser": {
+        "username": "sharedadministratordev@dight.ai",
+        "password": "8h+#haH9L]zd65v"
     },
     "expectedErrors": {
         "invalidCredentials": "incorrect password"

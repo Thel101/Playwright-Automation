@@ -1,6 +1,6 @@
 {
     "urls":{
-        "baseUrl":"https://app-dev.auditmypayroll.com.au/",
+        "baseUrl":"https://app-dev.auditmypayroll.com.au/companydirectory",
         "companyList" : "https://app-dev.auditmypayroll.com.au/companies",
         "createCompany" : "https://app-dev.auditmypayroll.com.au/managecompanydetail"
     },
@@ -37,7 +37,7 @@
         }
     },
     "account" : {
-        "name" : "Phyu",
+        "name" : "Phyu422",
         "email" : "phyu42264@gmail.com",
         "phone" : "0422 222 222",
         "role" : "QA"

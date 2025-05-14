@@ -62,7 +62,6 @@ class CreateCompanyPage extends BasePage {
 
     async fillBusinessAddress(streetName, suburbName, stateName, postalCode, additionalAddress) {
         console.log('Filling business address...');
-        await this.page.waitForLoadState('networkidle', { timeout: 60000 });
 
         await this.page.getByRole('textbox', { name: 'Street Address' }).fill(streetName);
 
@@ -123,18 +122,57 @@ class CreateCompanyPage extends BasePage {
         await this.page.getByRole('checkbox', { name: 'Same as contact details' }).check();
     }
     async fillSubscriptionInformation() {
+        try {
+            await this.enterDropdownValue(this.createElements.subscriptionPackage, 'Essential'); // Fill the input to trigger the dropdown4
 
-        await this.enterDropdownValue(this.createElements.subscriptionPackage, 'Essential'); // Fill the input to trigger the dropdown4
+            await this.enterDropdownValue(this.createElements.subscriptionDuration, 'Monthly'); // Fill the input to trigger the dropdown
 
-        await this.enterDropdownValue(this.createElements.subscriptionDuration, 'Monthly'); // Fill the input to trigger the dropdown
+            await this.page.getByRole('textbox', { name: 'Start Date' }).click();
+            await selectCurrentDateOption(this.page);
+            await this.page.locator('input[type="checkbox"][name="CreateCustomerUserWithContactInfo"]').check();
 
-        await this.page.getByRole('textbox', { name: 'Start Date' }).click();
-        await this.page.getByRole('option', { name: 'Choose Wednesday, April 16th,' }).click();
-        await this.page.locator('input[type="checkbox"][name="CreateCustomerUserWithContactInfo"]').check();
-
-        await this.page.getByRole('button', { name: 'Create' }).click();
-        await this.page.getByRole('button', { name: 'OK' }).click();
+            await this.page.getByRole('button', { name: 'Create' }).click();
+            await this.page.getByRole('button', { name: 'OK' }).click();
+        }
+        catch (error) {
+            console.error('Failed to fill subscription information:', error);
+            await this.page.screenshot({ path: 'tests/features/company/list/screenshots/create-company-error.png', fullPage: true });
+            throw error;
+        }
 
     }
+}
+function getOrdinalSuffix(day) {
+    if (day > 3 && day < 21) return 'th'; // Handles 11th, 12th, 13th
+    switch (day % 10) {
+        case 1: return 'st';
+        case 2: return 'nd';
+        case 3: return 'rd';
+        default: return 'th';
+    }
+}
+
+async function selectCurrentDateOption(page) {
+    const today = new Date();
+
+    const dayOfWeek = today.toLocaleString('en-US', { weekday: 'long' });
+
+    // Get full month name (e.g., 'April')
+    const month = today.toLocaleString('en-US', { month: 'long' });
+
+    // Get day of the month (e.g., 16)
+    const dayOfMonth = today.getDate();
+
+    // Get the ordinal suffix (e.g., 'th' for 16th)
+    const ordinalSuffix = getOrdinalSuffix(dayOfMonth);
+
+    // Construct the full string for the name attribute
+    const dateString = `Choose ${dayOfWeek}, ${month} ${dayOfMonth}${ordinalSuffix},`;
+
+    console.log(`Looking for option with name: "${dateString}"`);
+
+    const dateOptionLocator = page.getByRole('option', { name: dateString });
+    await dateOptionLocator.click();
+
 }
 module.exports = CreateCompanyPage;

@@ -134,15 +134,14 @@ steps:
 
 # Generate and publish test reports
 - script: |
-    npx playwright merge-reports --reporter=junit --reporter=html ./test-results
-  displayName: 'Merge Test Reports'
+    npx playwright test --reporter=junit:test-results/junit-report.xml
+  displayName: 'Run Playwright Tests (JUnit Report)'
   condition: always()
   continueOnError: true
 
-
 - script: |
-    npx playwright test --reporter=junit:test-results/junit-report.xml
-  displayName: 'Run Playwright Tests (JUnit Report)'
+    npx playwright merge-reports --reporter=junit --reporter=html ./test-results
+  displayName: 'Merge Test Reports'
   condition: always()
   continueOnError: true
 
@@ -187,7 +186,7 @@ steps:
   continueOnError: true
 
 
-# Step 5: Run custom script to update Azure Test Plans
-- script: |
-    node update-test-results.js
-  displayName: 'Update Azure Test Plan Cases'
+# # Step 5: Run custom script to update Azure Test Plans
+# - script: |
+#     node update-test-results.js
+#   displayName: 'Update Azure Test Plan Cases'
