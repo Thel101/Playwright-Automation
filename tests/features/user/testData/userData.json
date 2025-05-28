@@ -1,9 +1,11 @@
 {
     "urls": {
-        "baseUrl": "https://compliancerdev.auditmypayroll.com.au",
-        "adminUrl": "https://compliancerdev.auditmypayroll.com.au/admin",
-        "userListUrl": "https://compliancerdev.auditmypayroll.com.au/users",
-        "createUserUrl": "https://compliancerdev.auditmypayroll.com.au/createuserdetail"
+        "baseUrl": "https://app-dev.auditmypayroll.com.au/",
+        "businessSettingsUrl": "https://app-dev.auditmypayroll.com.au/business-settings",
+        "userListUrl": "https://app-dev.auditmypayroll.com.au/users",
+        "createUserUrl": "https://app-dev.auditmypayroll.com.au/manageuserdetail",
+        "profileUrl": "https://app-dev.auditmypayroll.com.au/profile",
+        "changePasswordUrl": "https://app-dev.auditmypayroll.com.au/changepassword"
     },
     "elements": {
         "adminMenu": "a.menu-list[href='/admin']",
@@ -21,6 +23,18 @@
         "email": "input#email-address-input",
         "editButton" : "a[href='/edituserdetail']",
         "userStatus" : "div:has-text('Status')"
+    },
+    "contents"  : {
+        "profileTitleText": "Profile Settings",
+        "profileSubtitleText": "Displays essential user information and provides the option to update your password.",
+        "passwordDescriptionText": "For your security, consider updating your password regularly. Click the button to change password."    
+    },
+    "passwords": {
+        "currentPassword": "Def@u1tPW",
+        "newPassword": "NewPassword1!",
+        "confirmNewPassword": "NewPassword1!",
+        "invalidPassword": "InvalidPassword",
+        "wrongCurrentPassword": "WrongCurrentPassword"
     }
 
 

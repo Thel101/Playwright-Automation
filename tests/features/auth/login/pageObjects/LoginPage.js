@@ -1,3 +1,4 @@
+const { time } = require('console');
 const BasePage = require('../../../../utils/BasePage');
 const testData = require('../testData/loginData.json');
 
@@ -6,7 +7,8 @@ class LoginPage extends BasePage {
         super(page);
         // Using selectors from testData for better maintainability
         this.selectors = testData.elements;
-        this.apiData = null;
+        this.apiData = null; // Initialize apiData to null
+
     }
 
     async login(username, password) {
@@ -34,21 +36,22 @@ class LoginPage extends BasePage {
             // Step 4: Click submit button
             console.log('Submitting login form...');
             await this.page.locator(this.selectors.submitButton).click();
-
-            // Step 5: Wait for navigation to complete
-            await this.page.waitForLoadState('networkidle', { timeout: 60000 });
-            const [response] = await Promise.all([
-                this.page.waitForResponse((resp) =>
-                    resp.url().includes('https://dev-compliancer-app-service-1.azurewebsites.net/api/locations/suburbs') && resp.status() === 200),
-            ]);
-            await response.json();
-            console.log('Login flow completed');
             // This is a no-op, but it can be useful for debugging
         } catch (error) {
             console.error('Login flow failed:', error);
             await this.page.screenshot({ path: 'tests/features/auth/login/screenshots/login-flow-error.png', fullPage: true });
             throw error;
         }
+    }
+    async getSuburbsData() {
+        // Step 5: Wait for navigation to complete
+        await this.page.waitForLoadState('networkidle', { timeout: 60000 });
+        const [response] = await Promise.all([
+            this.page.waitForResponse((resp) =>
+                resp.url().includes('https://dev-compliancer-app-service-1.azurewebsites.net/api/locations/suburbs') && resp.status() === 200, {timeout: 120000})
+        ]);
+        this.apiData = await response.json();
+        console.log('Login flow completed');
     }
     async logout() {
         console.log('Logging out...');
@@ -64,7 +67,21 @@ class LoginPage extends BasePage {
         }
     }
     async enterCompany(companyName) {
-        await this.page.getByRole('cell', { name: `${companyName}` }).click();
+
+        const company = this.page.getByRole('cell', { name: companyName });
+
+        await company.first().waitFor({ state: 'visible', timeout: 5000 });
+        const count = await company.count();
+        if(count > 1) {
+            console.log(`Multiple companies found with name: ${companyName}. Selecting the first one.`);
+            await company.first().click();
+        } else if (count === 1) {
+            console.log(`Selecting company: ${companyName}`);
+            await company.click();
+        }
+        else {
+            throw new Error(`No company found with name: ${companyName}`);
+        }
         await this.page.getByRole('button', { name: 'Confirm' }).click();
     }
     async getApiData() {
@@ -73,8 +90,6 @@ class LoginPage extends BasePage {
         }
         return this.apiData;
     }
-
-
     // Add this method to your LoginPage class
     async loginWithExtendedTimeouts(username, password) {
         console.log('Starting Azure AD B2C login flow with extended timeouts...');

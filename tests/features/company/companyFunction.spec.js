@@ -4,7 +4,7 @@ const CompanyListPage = require('./pageObjects/CompanyListPage');
 const LoginPage = require('../auth/login/pageObjects/LoginPage');
 const testData = require('./testData/companyData.json');
 
-test.use({ project: 'chrome-authenticated' });
+test.use({ project: 'chrome-authenticated-company' });
 
 let contactInfo = testData.account
 const companyName = generateCompanyName();
@@ -33,31 +33,31 @@ test.describe('Company Feature', () => {
         console.log('Navigated to create company page successfully.');
         await page.screenshot({ path: 'tests/features/company/screenshots/create-company-page.png', fullPage: true });
     })
-    // test('can create a new company', async ({ page }) => {
-    //     await page.goto(testData.urls.companyList);
-    //     await page.locator(testData.elements.companyList.createButton).click();
+    test('can create a new company', async ({ page }) => {
+        await page.goto(testData.urls.companyList);
+        await page.locator(testData.elements.companyList.createButton).click();
     
-    //     createCompanyPage = new CreateCompanyPage(page);
-    //     await createCompanyPage.fillCompanyDetails(companyName);
-    //     console.log('Company details filled successfully.');
+        createCompanyPage = new CreateCompanyPage(page);
+        await createCompanyPage.fillCompanyDetails(companyName);
+        console.log('Company details filled successfully.');
 
-    //     await createCompanyPage.fillBusinessAddress('123 Main St', 'Aarons Pass', 'New South Wales', '2850', 'Suite 1');
-    //     console.log('Business address filled successfully.');
+        await createCompanyPage.fillBusinessAddress('123 Main St', 'Aarons Pass', 'New South Wales', '2850', 'Suite 1');
+        console.log('Business address filled successfully.');
 
-    //     await createCompanyPage.fillContactDetails(contactInfo.name, contactInfo.email, contactInfo.role, contactInfo.phone);
-    //     console.log('Contact details filled successfully.');
+        await createCompanyPage.fillContactDetails(contactInfo.name, contactInfo.email, contactInfo.role, contactInfo.phone);
+        console.log('Contact details filled successfully.');
 
-    //     await createCompanyPage.fillPayrollIndustryInformation();
-    //     console.log('Payroll industry information filled successfully.');
+        await createCompanyPage.fillPayrollIndustryInformation();
+        console.log('Payroll industry information filled successfully.');
 
-    //     await createCompanyPage.fillBillingInformation();
-    //     console.log('Billing information filled successfully.');
+        await createCompanyPage.fillBillingInformation();
+        console.log('Billing information filled successfully.');
 
-    //     await createCompanyPage.fillSubscriptionInformation();
-    //     console.log('Subscription information filled successfully.');
+        await createCompanyPage.fillSubscriptionInformation();
+        console.log('Subscription information filled successfully.');
 
-    //     await page.screenshot({ path: 'tests/features/company/screenshots/create-company.png', fullPage: true });
-    // })
+        await page.screenshot({ path: 'tests/features/company/screenshots/create-company.png', fullPage: true });
+    })
 
    
 

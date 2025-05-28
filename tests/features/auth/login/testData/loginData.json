@@ -17,7 +17,11 @@
         "basic_user": {
             "username": "phyusnoe846@gmail.com",
             "password": "Def@u1tPW"  
-        }    
+        },
+        "invalidUser": {
+            "username": "222aa@gmail.com",
+            "password": "Def@u1tPW"
+        }
     },
     "elements": {
         "connectButton": "button:has-text(\"Connect\")",
@@ -35,18 +39,7 @@
         "logoutButton": "div:has-text(\"Logout\")",
         "logoutConfirmButton": "button:has-text(\"Log Out\")"
     },
-    "invalidUser": {
-        "username": "invalid@auditmypayroll.com.au",
-        "password": "WrongPassword123"
-    },
-    "singleSuperUser": {
-        "username": "pkyaw@dight.ai",
-        "password": "Def@u1tPW"
-    },
-    "adminUser": {
-        "username": "sharedadministratordev@dight.ai",
-        "password": "8h+#haH9L]zd65v"
-    },
+   
     "expectedErrors": {
         "invalidCredentials": "incorrect password"
     }

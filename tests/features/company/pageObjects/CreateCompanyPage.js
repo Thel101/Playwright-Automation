@@ -47,7 +47,8 @@ class CreateCompanyPage extends BasePage {
 
     async fillCompanyDetails(companyName) {
         console.log('Filling company details...');
-        await this.page.getByRole('textbox', { name: 'e.g. AMP Corporation', exact: true }).fill(companyName);
+        const updatedName = `${companyName} - 2`;
+        await this.page.getByRole('textbox', { name: 'e.g. AMP Corporation', exact: true }).fill(updatedName);
         await this.page.getByRole('checkbox', { name: 'Same as business name' }).check();
 
         const inputs = this.page.locator('xpath=//*[@id[starts-with(., "input-")]]');

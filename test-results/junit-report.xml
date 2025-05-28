@@ -1,11 +1,11 @@
-<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="44.580449">
-<testsuite name="global.setup.js" timestamp="2025-05-14T09:47:53.806Z" hostname="setup" tests="1" failures="0" skipped="0" time="20.365" errors="0">
-<testcase name="Setting up Authenticate" classname="global.setup.js" time="20.365">
+<testsuites id="" name="" tests="4" failures="3" skipped="0" errors="0" time="72.09336300000001">
+<testsuite name="global.setup.js" timestamp="2025-05-28T08:58:19.105Z" hostname="setup" tests="1" failures="0" skipped="0" time="22.288" errors="0">
+<testcase name="Setting up Authenticate" classname="global.setup.js" time="22.288">
 <system-out>
 <![CDATA[Starting authentication setup...
 Running in pipeline: No
 Using standard authentication flow...
-Logging in as super_user...
+Logging in as admin...
 Starting Azure AD B2C login flow...
 Clicking Connect button...
 Entering username...
@@ -13,17 +13,85 @@ Entering password...
 Submitting login form...
 Login flow completed
 Verifying successful login...
-Current URL: https://app-dev.auditmypayroll.com.au/dashboard
+Current URL: https://app-dev.auditmypayroll.com.au/companydirectory
 Expected URL: undefined
 Saving authentication state...
-Authentication state saved to auth-super_user.json
+Authentication state saved to auth-admin.json
 Authentication setup completed successfully
 ]]>
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="features\compliancer\assessmentFeature.spec.js" timestamp="2025-05-14T09:47:53.806Z" hostname="chrome-authenticated-assessment" tests="1" failures="0" skipped="0" time="17.361" errors="0">
-<testcase name="Assessment feature › Manage assessment" classname="features\compliancer\assessmentFeature.spec.js" time="17.361">
+<testsuite name="features\company\companyFunction.spec.js" timestamp="2025-05-28T08:58:19.105Z" hostname="chrome-authenticated-company" tests="3" failures="3" skipped="0" time="44.644" errors="0">
+<testcase name="Company Feature › should navigate to company list when authenticated" classname="features\company\companyFunction.spec.js" time="38.723">
+<failure message="companyFunction.spec.js:21:5 should navigate to company list when authenticated" type="FAILURE">
+<![CDATA[  [chrome-authenticated-company] › features\company\companyFunction.spec.js:21:5 › Company Feature › should navigate to company list when authenticated 
+
+    TimeoutError: locator.click: Timeout 30000ms exceeded.
+    Call log:
+      - waiting for locator('div').filter({ hasText: /^company$/ }).first()
+
+
+      20 |     });
+      21 |     test('should navigate to company list when authenticated', async ({ page }) => {
+    > 22 |         await page.locator('div').filter({ hasText: /^company$/ }).first().click();
+         |                                                                            ^
+      23 |         companyListPage = new CompanyListPage(page);
+      24 |         await companyListPage.waitForCompanyListLoad();
+      25 |         console.log('Company list loaded successfully.');
+        at D:\Automation Playwright-1\tests\features\company\companyFunction.spec.js:22:76
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\companyFunction-Company-Fe-9cba1-any-list-when-authenticated-chrome-authenticated-company\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[Multiple companies found with name: Snow Limited. Selecting the first one.
+
+[[ATTACHMENT|companyFunction-Company-Fe-9cba1-any-list-when-authenticated-chrome-authenticated-company\test-failed-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Company Feature › should navigate to create company page" classname="features\company\companyFunction.spec.js" time="4.004">
+<failure message="companyFunction.spec.js:29:5 should navigate to create company page" type="FAILURE">
+<![CDATA[  [chrome-authenticated-company] › features\company\companyFunction.spec.js:29:5 › Company Feature › should navigate to create company page 
+
+    Error: page.goto: Target page, context or browser has been closed
+    Call log:
+      - navigating to "https://app-dev.auditmypayroll.com.au/companydirectory", waiting until "load"
+
+
+      15 |     
+      16 |     test.beforeEach(async ({ page }) => {
+    > 17 |         await page.goto(testData.urls.baseUrl);
+         |                    ^
+      18 |         const loginPage = new LoginPage(page);
+      19 |         await loginPage.enterCompany('Snow Limited');
+      20 |     });
+        at D:\Automation Playwright-1\tests\features\company\companyFunction.spec.js:17:20
+]]>
+</failure>
+</testcase>
+<testcase name="Company Feature › can create a new company" classname="features\company\companyFunction.spec.js" time="1.917">
+<failure message="companyFunction.spec.js:36:5 can create a new company" type="FAILURE">
+<![CDATA[  [chrome-authenticated-company] › features\company\companyFunction.spec.js:36:5 › Company Feature › can create a new company 
+
+    Error: page.goto: Target page, context or browser has been closed
+    Call log:
+      - navigating to "https://app-dev.auditmypayroll.com.au/companydirectory", waiting until "load"
+
+
+      15 |     
+      16 |     test.beforeEach(async ({ page }) => {
+    > 17 |         await page.goto(testData.urls.baseUrl);
+         |                    ^
+      18 |         const loginPage = new LoginPage(page);
+      19 |         await loginPage.enterCompany('Snow Limited');
+      20 |     });
+        at D:\Automation Playwright-1\tests\features\company\companyFunction.spec.js:17:20
+]]>
+</failure>
 </testcase>
 </testsuite>
 </testsuites>

@@ -21,7 +21,7 @@ class CompleteAssessment extends BasePage {
     }
     async chooseAssessment() {
         await this.page.locator('div').filter({ hasText: /^Assessment$/ }).getByLabel('open combobox').click();
-        await this.page.getByRole('option', { name: 'Snow Assessment 7' }).click();
+        await this.page.getByRole('option', { name: `${testData.elements.assessmentName}` }).click();
     }
     async chooseAnswer(element, option) {
         const input_box = this.page.locator(element);
@@ -29,15 +29,18 @@ class CompleteAssessment extends BasePage {
         await this.page.getByRole('option', { name: option }).click();
     }
     async completePeoplePillarAssessment() {
-
+        const answer = ''
         await this.page.locator('div').filter({ hasText: /^1\. People$/ }).nth(1).click();
-
         await this.chooseAnswer('input#questions-comboboxlist-424-1_input', people_question_1[0].response);
+        let people_q1_score = 5;
 
         await this.chooseAnswer('input#questions-comboboxlist-425-2_input', people_question_2[0].response);
+        let people_q2_score = 5;
 
         await this.chooseAnswer('input#questions-comboboxlist-426-3_input', people_question_3[0].response);
-
+        let people_q3_score = 5;
+        let people_total_score = people_q1_score + people_q2_score + people_q3_score;
+        return people_q1_score, people_q2_score, people_q3_score, people_total_score;
     }
 
     async completeProcessPillarAssessment() {

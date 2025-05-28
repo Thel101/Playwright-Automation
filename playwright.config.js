@@ -125,19 +125,32 @@ module.exports = defineConfig({
         }
       }
     },
-    // {
-    //   name: 'edge-authenticated',
-    //   testMatch: /.*\.spec\.js/,
-    //   testIgnore: /login\.spec\.js/,
-    //   use: {
-    //     channel: 'msedge',
-    //     ...devices['Desktop Edge'],
-    //     storageState: 'auth.json',
-    //     launchOptions: {
-    //       args: ['--start-maximized']
-    //     }
-    //   }
-    // },
+    {
+      name: 'chrome-authenticated-profile',
+      testDir: './tests/features/user',
+      dependencies: ['setup'],
+      testIgnore: /login\.spec\.js/,
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'auth-super_user.json',
+        launchOptions: {
+          args: ['--start-maximized']
+        }
+      }
+    },
+    {
+      name: 'edge-authenticated-dashboard',
+      testMatch: /.*\.spec\.js/,
+      testIgnore: /login\.spec\.js/,
+      use: {
+        channel: 'msedge',
+        ...devices['Desktop Edge'],
+        storageState: 'auth-super_user.json',
+        launchOptions: {
+          args: ['--start-maximized']
+        }
+      }
+    },
     // {
     //   name: 'firefox-authenticated',
     //   testMatch: /.*\.spec\.js/,

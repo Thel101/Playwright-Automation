@@ -12,9 +12,9 @@ class DashboardPage extends BasePage {
     async waitForDashboardLoad() {
         console.log('Waiting for dashboard to load...');
         try {
-            await this.page.waitForSelector(this.selectors.userButton, { 
-                state: 'visible', 
-                timeout: 30000 
+            await this.page.waitForSelector(this.selectors.userButton, {
+                state: 'visible',
+                timeout: 30000
             });
             await this.page.waitForLoadState('networkidle');
             console.log('Dashboard loaded successfully');
@@ -24,24 +24,43 @@ class DashboardPage extends BasePage {
             throw error;
         }
     }
+    async checkCompliancerSection() {
+        return await this.page.locator('h2:has-text("Payroll Compliancer")')
+    }
+    async checkAutierSection() {
+        return await this.page.locator('h3:has-text("Payroll Auditer")')
+    }
+    async checkNewsFeedSection() {
+        return await this.page.locator('h2:has-text("News Feed")')
+    }
+    async checkPillarsComponent() {
+        return await this.page.locator('li.react-multi-carousel-item--active');
 
-    async getUserProfileInfo() {
-        console.log('Getting user profile information...');
-        const profileElement = this.page.locator(this.selectors.userProfile);
-        await profileElement.waitFor({ state: 'visible', timeout: 30000 });
-        const profileText = await profileElement.textContent();
-        console.log('User profile info retrieved:', profileText);
-        return profileText;
+    }
+    async checkCarouselButtons() {
+        const nextButton = this.page.locator('div.carousel-left');
+        const prevButton = this.page.locator('div.carousel-right');
+
+        await nextButton.waitFor({ state: 'visible', timeout: 3000 });
+        await prevButton.waitFor({ state: 'visible', timeout: 3000 });
+
+        return { nextButton, prevButton };
+    }
+    async checkAuditerButtons() {
+        const requestText = this.page.locator('div.payroll-auditer-area-detail:has-text("Click below to request")'); // Updated to div and its class
+        const contactUsButton = this.page.locator('button.amp-btn.upload-btn:has-text("Contact Us")'); // Added more specific classes
+        return [requestText, contactUsButton ];
+    }
+    async checkNewsFeedComponents() {
+        const newsFeedLinks = this.page.locator('div.new-feed-list-row');
+        
+        const footer = this.page.locator('div.pagination')
+        await footer.waitFor({ state: 'visible', timeout: 30000 });
+
+        return [newsFeedLinks, footer ];
     }
 
-    async navigateToSettings() {
-        console.log('Navigating to settings...');
-        const settingsButton = this.page.locator(this.selectors.settingsButton);
-        await settingsButton.waitFor({ state: 'visible', timeout: 30000 });
-        await settingsButton.click();
-        await this.page.waitForLoadState('networkidle');
-        console.log('Navigated to settings page');
-    }
+
 
     async logout() {
         console.log('Logging out...');

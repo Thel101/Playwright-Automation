@@ -61,6 +61,12 @@ setup('Setting up Authenticate', async ({ page }) => {
 
             console.log(`Logging in as ${process.env.ROLE || 'basic_user'}...`);
             await loginPage.login(credentials.username, credentials.password);
+            const [response] = await Promise.all([
+                page.waitForResponse((resp) =>
+                    resp.url().includes('https://dev-compliancer-app-service-1.azurewebsites.net/api/locations/suburbs') && resp.status() === 200, { timeout: 60000 })
+            ]);
+            await response.json();
+            console.log('Login flow completed');
         }
 
         // Verify successful login with more flexible approach
