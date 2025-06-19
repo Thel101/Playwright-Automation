@@ -31,13 +31,13 @@ class CompleteAssessment extends BasePage {
     async completePeoplePillarAssessment() {
         const answer = ''
         await this.page.locator('div').filter({ hasText: /^1\. People$/ }).nth(1).click();
-        await this.chooseAnswer('input#questions-comboboxlist-424-1_input', people_question_1[0].response);
+        await this.chooseAnswer('input#questions-comboboxlist-94-1_input', people_question_1[0].response);
         let people_q1_score = 5;
 
-        await this.chooseAnswer('input#questions-comboboxlist-425-2_input', people_question_2[0].response);
+        await this.chooseAnswer('input#questions-comboboxlist-95-2_input', people_question_2[0].response);
         let people_q2_score = 5;
 
-        await this.chooseAnswer('input#questions-comboboxlist-426-3_input', people_question_3[0].response);
+        await this.chooseAnswer('input#questions-comboboxlist-96-3_input', people_question_3[0].response);
         let people_q3_score = 5;
         let people_total_score = people_q1_score + people_q2_score + people_q3_score;
         return people_q1_score, people_q2_score, people_q3_score, people_total_score;
@@ -47,15 +47,15 @@ class CompleteAssessment extends BasePage {
 
         await this.page.locator('div').filter({ hasText: /^2\. Process$/ }).nth(1).click();
 
-        await this.chooseAnswer('input#questions-comboboxlist-421-4_input', process_question_1[0].response);
+        await this.chooseAnswer('input#questions-comboboxlist-91-4_input', process_question_1[0].response);
 
-        await this.page.locator('#question-multiselect-422_taglist').click();
+        await this.page.locator('#question-multiselect-92_taglist').click();
         // await this.page.getByRole('option', { name: process_question_2[0].response }).click();
         for (let i = 0; i < 5; i++) {
             await this.page.getByRole('option', { name: `${process_question_2[i].response}` }).click();
         }
 
-        await this.page.locator('#question-multiselect-423_taglist').click();
+        await this.page.locator('#question-multiselect-93_taglist').click();
         for (let i = 0; i < 4; i++) {
             await this.page.getByRole('option', { name: `${process_question_3[i].response}` }).click();
         }
@@ -65,38 +65,39 @@ class CompleteAssessment extends BasePage {
     async completeCompliancePillarAssessment() {
         await this.page.getByText('3. Compliance').click();
 
-        await this.chooseAnswer('input#questions-comboboxlist-427-7_input', response.compliance_question_1[0].response);
+        await this.chooseAnswer('input#questions-comboboxlist-97-7_input', response.compliance_question_1[0].response);
         
-        await this.chooseAnswer('input#questions-comboboxlist-428-8_input', response.compliance_question_2[0].response);
+        await this.chooseAnswer('input#questions-comboboxlist-98-8_input', response.compliance_question_2[0].response);
         
 
-        await this.chooseAnswer('input#questions-comboboxlist-429-9_input', response.compliance_question_3[0].response);
+        await this.chooseAnswer('input#questions-comboboxlist-99-9_input', response.compliance_question_3[0].response);
 
     }
     async completeSystemPillarAssessment() {
         await this.page.locator('div').filter({ hasText: /^4\. Systems$/ }).nth(1).click();
 
-        await this.chooseAnswer('input#questions-comboboxlist-433-10_input', response.system_question_1[0].response);
-        await this.chooseAnswer('input#questions-comboboxlist-434-11_input', response.system_question_2[0].response);
-        await this.chooseAnswer('input#questions-comboboxlist-435-12_input', response.system_question_3[0].response);
+        await this.chooseAnswer('input#questions-comboboxlist-103-10_input', response.system_question_1[0].response);
+        await this.chooseAnswer('input#questions-comboboxlist-104-11_input', response.system_question_2[0].response);
+        await this.chooseAnswer('input#questions-comboboxlist-105-12_input', response.system_question_3[0].response);
         
     }
     async completeCulturePillarAssessment() {
         await this.page.locator('div').filter({ hasText: /^5\. Culture$/ }).nth(1).click();
 
-        await this.page.locator('#question-multiselect-430_taglist').click();
+        await this.page.locator('#question-multiselect-100_taglist').click();
         for (let i = 0; i < 5; i++) {
             await this.page.getByRole('option', { name: `${response.culture_question_1[i].response}` }).click();
         }
-        await this.chooseAnswer('input#questions-comboboxlist-431-14_input', response.culture_question_2[0].response);
-        await this.chooseAnswer('input#questions-comboboxlist-432-15_input', response.culture_question_3[0].response);
+        await this.page.getByText('Taking time to evaluate your current payroll system, processes and procedures fosters a best practice mindset.').click();
+   
+        await this.chooseAnswer('input#questions-comboboxlist-101-14_input', response.culture_question_2[0].response);
+        await this.chooseAnswer('input#questions-comboboxlist-102-15_input', response.culture_question_3[0].response);
     }
     async saveAssessment() {
 
         await this.page.getByRole('button', { name: 'Save' }).click();
         await this.page.getByRole('button', { name: 'OK' }).click();
     }
-
 
 }
 module.exports = CompleteAssessment;

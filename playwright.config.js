@@ -98,7 +98,7 @@ module.exports = defineConfig({
       }
     },
 
-    // Authenticated projects for all other tests
+    // Company projects
     {
       name: 'chrome-authenticated-company',
       testDir: './tests/features/company',
@@ -112,6 +112,9 @@ module.exports = defineConfig({
         }
       }
     },
+    
+    
+    //Assessment projects
     {
       name: 'chrome-authenticated-assessment',
       testDir: './tests/features/compliancer',
@@ -125,11 +128,14 @@ module.exports = defineConfig({
         }
       }
     },
+    // Profile projects
     {
       name: 'chrome-authenticated-profile',
       testDir: './tests/features/user',
       dependencies: ['setup'],
-      testIgnore: /login\.spec\.js/,
+      testIgnore: [
+        /login\.spec\.js/
+      ],
       use: {
         ...devices['Desktop Chrome'],
         storageState: 'auth-super_user.json',
@@ -138,42 +144,20 @@ module.exports = defineConfig({
         }
       }
     },
+    //Dashboard projects
     {
-      name: 'edge-authenticated-dashboard',
-      testMatch: /.*\.spec\.js/,
+      name: 'chrome-authenticated-dashboard',
+      testDir: './tests/features/dashboard/navigate',
       testIgnore: /login\.spec\.js/,
       use: {
         channel: 'msedge',
-        ...devices['Desktop Edge'],
+        ...devices['Desktop Chrome'],
         storageState: 'auth-super_user.json',
         launchOptions: {
           args: ['--start-maximized']
         }
       }
     },
-    // {
-    //   name: 'firefox-authenticated',
-    //   testMatch: /.*\.spec\.js/,
-    //   testIgnore: /login\.spec\.js/,
-    //   use: {
-    //     ...devices['Desktop Firefox'],
-    //     storageState: 'auth.json',
-    //     launchOptions: {
-    //       args: ['--start-maximized']
-    //     }
-    //   }
-    // },
-    // {
-    //   name: 'webkit-authenticated',
-    //   testMatch: /.*\.spec\.js/,
-    //   testIgnore: /login\.spec\.js/,
-    //   use: {
-    //     ...devices['Desktop Safari'],
-    //     storageState: 'auth.json',
-    //     launchOptions: {
-    //       args: ['--start-maximized']
-    //     }
-    //   }
-    // }
+   
   ]
 });

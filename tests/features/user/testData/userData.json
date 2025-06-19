@@ -10,7 +10,7 @@
     "elements": {
         "adminMenu": "a.menu-list[href='/admin']",
         "adminPageTitle" : "h1.main-title",
-        "adminPageSubTitle" : "div.user-manage-subtitle",
+        "adminPageSubTitle" : "div.user-manage-setting",
         "submenu": "div.user-manage-setting",
         "userManagementMenu": "div.user-title:has-text('User Management')",
         "userList" : "table tbody", 

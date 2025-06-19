@@ -5,28 +5,72 @@
         "createAssessment": "https://app-dev.auditmypayroll.com.au/assessment/create"
     },
     "assessment": {
-        "people_question_1": {
-            "We encourage our payroll team to attend industry conferences or webinars on payroll compliance.": 5,
-            "We utilise training programs or certifications offered by professional payroll associations.": 4,
-            "We subscribe to online resources or newsletters that provide updates on payroll regulations. ": 3,
-            "We have a dedicated resource person within the company who stays updated and informs the team.": 2,
-            "We don't have a structured approach to ensure our payroll team are updated on changes; attend training, undertake professional development or are a member of a payroll association.": 1
-        },
-        "people_question_2": {
-            "Very Confident": 5,
-            "Somewhat Confident": 4,
-            "Neutral": 3,
-            "Somewhat Unsure": 2,
-            "Not Confident": 1
-        },
-        "people_question_3": {
-            "Yes, we use a tailored skill and knowledge self-assessment tool so the payroll team can proactively identify their knowledge and skill strengths and gaps to build our team training and development activity. New recuits to the pay team do a knowledge assessment as part of our selection process.": 5,
-            "Yes, we broadly rate the team's knowledge and skills as part of the performance appraisal process and develop individual training plans.": 4,
-            "We encourage the pay team to self-identify gaps in their knowledge and skills and to request to attend relevant training, seminars, workshops.": 3,
-            "We are aware there may be skill and knowledge gaps within the pay team and we need to continue to improve our process to identify what these are and put a plan in place to build and maintain competence.": 2,
-            "We have not considered this. Can you provide me with more information?": 1
-        }
-       ,
+        "people_question_1": [
+            {
+                "response": "We encourage our payroll team to attend industry conferences or webinars on payroll compliance.",
+                "score": 5
+            },
+            {
+                "response": "We utilise training programs or certifications offered by professional payroll associations.",
+                "score": 4
+            },
+            {
+                "response": "We subscribe to online resources or newsletters that provide updates on payroll regulations.",
+                "score": 3
+            },
+            {
+                "response": "We have a dedicated resource person within the company who stays updated and informs the team.",
+                "score": 2
+            },
+            {
+                "response": "We don't have a structured approach to ensure our payroll team are updated on changes; attend training, undertake professional development or are a member of a payroll association.",
+                "score": 1
+            }
+        ],
+        "people_question_2": [
+            {
+                "response": "Very Confident",
+                "score": 5
+            },
+            {
+                "response": "Somewhat Confident",
+                "score": 4
+            },
+            {
+                "response": "Neutral",
+                "score": 3
+            },
+            {
+                "response": "Somewhat Unsure",
+                "score": 2
+            },
+            {
+                "response": "Not Confident",
+                "score": 1
+            }
+        ],
+        "people_question_3": [
+            {
+                "response": "Yes, we use a tailored skill and knowledge self-assessment tool so the payroll team can proactively identify their knowledge and skill strengths and gaps to build our team training and development activity. New recuits to the pay team do a knowledge assessment as part of our selection process.",
+                "score": 5
+            },
+            {
+                "response": "Yes, we broadly rate the team's knowledge and skills as part of the performance appraisal process and develop individual training plans.",
+                "score": 4
+            },
+            {
+                "response": "We encourage the pay team to self-identify gaps in their knowledge and skills and to request to attend relevant training, seminars, workshops.",
+                "score": 3
+            },
+            {
+                "response": "We are aware there may be skill and knowledge gaps within the pay team and we need to continue to improve our process to identify what these are and put a plan in place to build and maintain competence.",
+                "score": 2
+            },
+            {
+                "response": "We have not considered this. Can you provide me with more information?",
+                "score": 1
+            }
+        ],
         "process_question_1": [
             {
                 "response": "Very Satisfied",
@@ -309,7 +353,7 @@
         ]
     },
     "elements": {
-        "assessmentName": "Snow Assessment 7",
+        "assessmentName": "Mini Review",
         "overall_risk": "div.risk-assessment-info",
         "pillarHeader": "Pillar Name",
         "riskLevelHeader": "Risk Level Result",

@@ -5,26 +5,27 @@ class CreateCompanyPage extends BasePage {
     constructor(page) {
         super(page);
         this.selectors = testData.elements;
-        this.createElements = testData.elements.createCompany;
+        this.createElements = testData.elements.companyFields;
         this.urls = testData.urls;
     }
 
-    async waitForCompanyCreatePageLoad() {
-        console.log('Waiting for company list to load...');
+    async checkCreateCompanySection() {
+        console.log('Checking create company section...');
         try {
-            const title = await this.page.locator(this.createElements.title);
+            const title = await this.page.locator('h1.sub-title');
             await title.waitFor({ state: 'visible', timeout: 30000 });
 
-            const sections = await this.page.locator(this.createElements.section);
-            const sectionCount = await sections.count();
-            const sectionHeader = await sections.allTextContents();
+            const description = await this.page.locator('p.description');
+            await description.waitFor({ state: 'visible', timeout: 30000 });
 
+            const createButton = this.page.getByText('Create Company', { exact: true });
+            await createButton.waitFor({ state: 'visible', timeout: 30000 });
 
-            return { title, sectionCount, sectionHeader };
+            return [title, description, createButton ];
 
         } catch (error) {
             console.error('Failed to load company list:', error);
-            await this.page.screenshot({ path: 'tests/features/company/list/screenshots/company-list-load-error.png', fullPage: true });
+            await this.page.screenshot({ path: 'tests/features/company/list/screenshots/create-company-section-error.png', fullPage: true });
             throw error;
         }
     }
@@ -36,19 +37,9 @@ class CreateCompanyPage extends BasePage {
         await dropdown.press('Enter'); // Select the highlighted option
     }
 
-    async clickCreateCompanyButton() {
-        console.log('Clicking create company button...');
-        const createCompanyButton = this.page.locator(this.selectors.companyList.createButton);
-        await createCompanyButton.waitFor({ state: 'visible', timeout: 30000 });
-        await createCompanyButton.click();
-        await this.page.waitForLoadState('networkidle');
-        console.log('Clicked create company button');
-    }
-
     async fillCompanyDetails(companyName) {
         console.log('Filling company details...');
-        const updatedName = `${companyName} - 2`;
-        await this.page.getByRole('textbox', { name: 'e.g. AMP Corporation', exact: true }).fill(updatedName);
+        await this.page.getByRole('textbox', { name: 'e.g. AMP Corporation', exact: true }).fill(companyName);
         await this.page.getByRole('checkbox', { name: 'Same as business name' }).check();
 
         const inputs = this.page.locator('xpath=//*[@id[starts-with(., "input-")]]');
@@ -134,6 +125,7 @@ class CreateCompanyPage extends BasePage {
 
             await this.page.getByRole('button', { name: 'Create' }).click();
             await this.page.getByRole('button', { name: 'OK' }).click();
+            console.log('Subscription information filled successfully and company created.');
         }
         catch (error) {
             console.error('Failed to fill subscription information:', error);

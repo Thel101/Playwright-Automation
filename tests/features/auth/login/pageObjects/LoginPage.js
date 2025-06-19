@@ -83,6 +83,7 @@ class LoginPage extends BasePage {
             throw new Error(`No company found with name: ${companyName}`);
         }
         await this.page.getByRole('button', { name: 'Confirm' }).click();
+        await this.page.waitForLoadState('networkidle', { timeout: 60000 });
     }
     async getApiData() {
         if (!this.apiData) {

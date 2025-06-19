@@ -1,11 +1,11 @@
-<testsuites id="" name="" tests="4" failures="3" skipped="0" errors="0" time="72.09336300000001">
-<testsuite name="global.setup.js" timestamp="2025-05-28T08:58:19.105Z" hostname="setup" tests="1" failures="0" skipped="0" time="22.288" errors="0">
-<testcase name="Setting up Authenticate" classname="global.setup.js" time="22.288">
+<testsuites id="" name="" tests="11" failures="1" skipped="0" errors="0" time="148.75629800000002">
+<testsuite name="global.setup.js" timestamp="2025-06-06T08:17:16.020Z" hostname="setup" tests="1" failures="0" skipped="0" time="22.27" errors="0">
+<testcase name="Setting up Authenticate" classname="global.setup.js" time="22.27">
 <system-out>
 <![CDATA[Starting authentication setup...
 Running in pipeline: No
 Using standard authentication flow...
-Logging in as admin...
+Logging in as super_user...
 Starting Azure AD B2C login flow...
 Clicking Connect button...
 Entering username...
@@ -13,85 +13,161 @@ Entering password...
 Submitting login form...
 Login flow completed
 Verifying successful login...
-Current URL: https://app-dev.auditmypayroll.com.au/companydirectory
+Current URL: https://app-dev.auditmypayroll.com.au/dashboard
 Expected URL: undefined
 Saving authentication state...
-Authentication state saved to auth-admin.json
+Authentication state saved to auth-super_user.json
 Authentication setup completed successfully
 ]]>
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="features\company\companyFunction.spec.js" timestamp="2025-05-28T08:58:19.105Z" hostname="chrome-authenticated-company" tests="3" failures="3" skipped="0" time="44.644" errors="0">
-<testcase name="Company Feature › should navigate to company list when authenticated" classname="features\company\companyFunction.spec.js" time="38.723">
-<failure message="companyFunction.spec.js:21:5 should navigate to company list when authenticated" type="FAILURE">
-<![CDATA[  [chrome-authenticated-company] › features\company\companyFunction.spec.js:21:5 › Company Feature › should navigate to company list when authenticated 
+<testsuite name="features\user\changePassword.spec.js" timestamp="2025-06-06T08:17:16.020Z" hostname="chrome-authenticated-profile" tests="6" failures="0" skipped="0" time="67.957" errors="0">
+<testcase name="Change Password Page › Check Change Password heading" classname="features\user\changePassword.spec.js" time="4.981">
+<system-out>
+<![CDATA[Waiting for profile settings page to load...
+]]>
+</system-out>
+</testcase>
+<testcase name="Change Password Page › Check Change Password fields" classname="features\user\changePassword.spec.js" time="5.723">
+<system-out>
+<![CDATA[Waiting for profile settings page to load...
+]]>
+</system-out>
+</testcase>
+<testcase name="Change Password Page › Check password tooltip icon" classname="features\user\changePassword.spec.js" time="6.069">
+<system-out>
+<![CDATA[Waiting for profile settings page to load...
+]]>
+</system-out>
+</testcase>
+<testcase name="Change Password Page › check same current and new password" classname="features\user\changePassword.spec.js" time="19.211">
+<system-out>
+<![CDATA[Waiting for profile settings page to load...
+]]>
+</system-out>
+</testcase>
+<testcase name="Change Password Page › check new password and confirm password mismatch" classname="features\user\changePassword.spec.js" time="13.406">
+<system-out>
+<![CDATA[Waiting for profile settings page to load...
+]]>
+</system-out>
+</testcase>
+<testcase name="Change Password Page › check wrong current password" classname="features\user\changePassword.spec.js" time="18.567">
+<system-out>
+<![CDATA[Waiting for profile settings page to load...
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="features\user\profile.spec.js" timestamp="2025-06-06T08:17:16.020Z" hostname="chrome-authenticated-profile" tests="3" failures="0" skipped="0" time="18.297" errors="0">
+<testcase name="Profile Settings Page › Check Profile Settings and Password sections" classname="features\user\profile.spec.js" time="5.471">
+<system-out>
+<![CDATA[Waiting for profile settings page to load...
+]]>
+</system-out>
+</testcase>
+<testcase name="Profile Settings Page › Verify profile settings fields" classname="features\user\profile.spec.js" time="6.837">
+<system-out>
+<![CDATA[Waiting for profile settings page to load...
+Name field checking completed
+Position field checking completed
+Email field checking completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Profile Settings Page › Verify change password button" classname="features\user\profile.spec.js" time="5.989">
+<system-out>
+<![CDATA[Waiting for profile settings page to load...
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="features\user\userFunction.spec.js" timestamp="2025-06-06T08:17:16.020Z" hostname="chrome-authenticated-profile" tests="1" failures="1" skipped="0" time="33.902" errors="0">
+<testcase name="Admin Navigation › create user" classname="features\user\userFunction.spec.js" time="33.902">
+<failure message="userFunction.spec.js:27:5 create user" type="FAILURE">
+<![CDATA[  [chrome-authenticated-profile] › features\user\userFunction.spec.js:27:5 › Admin Navigation › create user 
 
-    TimeoutError: locator.click: Timeout 30000ms exceeded.
+    TimeoutError: locator.waitFor: Timeout 30000ms exceeded.
     Call log:
-      - waiting for locator('div').filter({ hasText: /^company$/ }).first()
+      - waiting for locator('a[href=\'/createuserdetail\']') to be visible
 
 
-      20 |     });
-      21 |     test('should navigate to company list when authenticated', async ({ page }) => {
-    > 22 |         await page.locator('div').filter({ hasText: /^company$/ }).first().click();
-         |                                                                            ^
-      23 |         companyListPage = new CompanyListPage(page);
-      24 |         await companyListPage.waitForCompanyListLoad();
-      25 |         console.log('Company list loaded successfully.');
-        at D:\Automation Playwright-1\tests\features\company\companyFunction.spec.js:22:76
+       at features\user\pageObjects\createUserPage.js:28
+
+      26 |
+      27 |         const createUserButton = this.page.locator(this.selectors.createUserButton);
+    > 28 |         await createUserButton.waitFor({ state: 'visible', timeout: 30000 });
+         |                                ^
+      29 |         await createUserButton.click()
+      30 |         const createUserPageTitle = this.page.locator(this.selectors.createUserPageTitle);
+      31 |         return createUserPageTitle;
+        at createUserPage.navigateToUserList (D:\Automation Playwright-1\tests\features\user\pageObjects\createUserPage.js:28:32)
+        at D:\Automation Playwright-1\tests\features\user\userFunction.spec.js:30:41
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results\companyFunction-Company-Fe-9cba1-any-list-when-authenticated-chrome-authenticated-company\test-failed-1.png
+    test-results\userFunction-Admin-Navigation-create-user-chrome-authenticated-profile\test-failed-1.png
     ────────────────────────────────────────────────────────────────────────────────────────────────
 ]]>
 </failure>
 <system-out>
-<![CDATA[Multiple companies found with name: Snow Limited. Selecting the first one.
+<![CDATA[Navigating to user list...
 
-[[ATTACHMENT|companyFunction-Company-Fe-9cba1-any-list-when-authenticated-chrome-authenticated-company\test-failed-1.png]]
+[[ATTACHMENT|userFunction-Admin-Navigation-create-user-chrome-authenticated-profile\test-failed-1.png]]
 ]]>
 </system-out>
-</testcase>
-<testcase name="Company Feature › should navigate to create company page" classname="features\company\companyFunction.spec.js" time="4.004">
-<failure message="companyFunction.spec.js:29:5 should navigate to create company page" type="FAILURE">
-<![CDATA[  [chrome-authenticated-company] › features\company\companyFunction.spec.js:29:5 › Company Feature › should navigate to create company page 
+<system-err>
+<![CDATA[Test failed: locator.waitFor: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('a[href=\'/createuserdetail\']') to be visible[22m
 
-    Error: page.goto: Target page, context or browser has been closed
-    Call log:
-      - navigating to "https://app-dev.auditmypayroll.com.au/companydirectory", waiting until "load"
-
-
-      15 |     
-      16 |     test.beforeEach(async ({ page }) => {
-    > 17 |         await page.goto(testData.urls.baseUrl);
-         |                    ^
-      18 |         const loginPage = new LoginPage(page);
-      19 |         await loginPage.enterCompany('Snow Limited');
-      20 |     });
-        at D:\Automation Playwright-1\tests\features\company\companyFunction.spec.js:17:20
+    at createUserPage.navigateToUserList [90m(D:\Automation Playwright-1\[39mtests\features\user\pageObjects\createUserPage.js:28:32[90m)[39m
+    at [90mD:\Automation Playwright-1\[39mtests\features\user\userFunction.spec.js:30:41 {
+  name: [32m'TimeoutError'[39m,
+  [[32mSymbol(step)[39m]: {
+    stepId: [32m'pw:api@7'[39m,
+    location: {
+      file: [32m'D:\\Automation Playwright-1\\tests\\features\\user\\pageObjects\\createUserPage.js'[39m,
+      line: [33m28[39m,
+      column: [33m32[39m,
+      function: [32m'createUserPage.navigateToUserList'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m"locator.waitFor(a[href='/createuserdetail'])"[39m,
+    apiName: [32m'locator.waitFor'[39m,
+    params: {
+      selector: [32m"a[href='/createuserdetail']"[39m,
+      strict: [33mtrue[39m,
+      omitReturnValue: [33mtrue[39m,
+      state: [32m'visible'[39m,
+      timeout: [33m30000[39m
+    },
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@7'[39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1749197983182[39m,
+    error: {
+      message: [32m'TimeoutError: locator.waitFor: Timeout 30000ms exceeded.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m"\x1B[2m  - waiting for locator('a[href=\\'/createuserdetail\\']') to be visible\x1B[22m\n"[39m,
+      stack: [32m'TimeoutError: locator.waitFor: Timeout 30000ms exceeded.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m"\x1B[2m  - waiting for locator('a[href=\\'/createuserdetail\\']') to be visible\x1B[22m\n"[39m +
+        [32m'\n'[39m +
+        [32m'    at createUserPage.navigateToUserList (D:\\Automation Playwright-1\\tests\\features\\user\\pageObjects\\createUserPage.js:28:32)\n'[39m +
+        [32m'    at D:\\Automation Playwright-1\\tests\\features\\user\\userFunction.spec.js:30:41'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
 ]]>
-</failure>
-</testcase>
-<testcase name="Company Feature › can create a new company" classname="features\company\companyFunction.spec.js" time="1.917">
-<failure message="companyFunction.spec.js:36:5 can create a new company" type="FAILURE">
-<![CDATA[  [chrome-authenticated-company] › features\company\companyFunction.spec.js:36:5 › Company Feature › can create a new company 
-
-    Error: page.goto: Target page, context or browser has been closed
-    Call log:
-      - navigating to "https://app-dev.auditmypayroll.com.au/companydirectory", waiting until "load"
-
-
-      15 |     
-      16 |     test.beforeEach(async ({ page }) => {
-    > 17 |         await page.goto(testData.urls.baseUrl);
-         |                    ^
-      18 |         const loginPage = new LoginPage(page);
-      19 |         await loginPage.enterCompany('Snow Limited');
-      20 |     });
-        at D:\Automation Playwright-1\tests\features\company\companyFunction.spec.js:17:20
-]]>
-</failure>
+</system-err>
 </testcase>
 </testsuite>
 </testsuites>

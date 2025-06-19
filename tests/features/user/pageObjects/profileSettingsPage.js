@@ -26,8 +26,11 @@ class ProfileSettingsPage extends BasePage {
         const emailField = this.page.locator('input[name="Email"]');
         return [nameField, positionField, emailField];
     }
+    async getChangePasswordButton() {
+        const pwd_button = this.page.getByRole('button', { name: 'Change Password' });
+        return pwd_button;
+    }
 
-   
 
 }
 module.exports = ProfileSettingsPage;

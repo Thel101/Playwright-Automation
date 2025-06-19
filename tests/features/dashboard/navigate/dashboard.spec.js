@@ -14,32 +14,7 @@ test.describe('Dashboard Navigation', () => {
         await page.waitForLoadState('networkidle');
     });
 
-    // test('TC3492 - should load dashboard when authenticated ', async ({ page }) => {
-    //     test.info().annotations.push({
-    //         type: 'testCaseId',
-    //         description: '3164'
-    //     });
-
-    //     try {
-    //         // Verify we're on the dashboard page
-    //         console.log('Checking if redirected to dashboard page...');
-    //         await expect(page).toHaveURL(testData.urls.expectedDashboardUrl, { timeout: 30000 });
-
-    //         // Wait for dashboard elements using page object
-    //         await dashboardPage.waitForDashboardLoad();
-
-    //         // Verify user button is visible
-    //         await expect(page.locator('#user-button')).toBeVisible();
-
-    //         // Take a screenshot for verification
-    //         await page.screenshot({ path: 'tests/features/dashboard/navigate/screenshots/authenticated-dashboard.png', fullPage: true });
-    //         console.log('Test completed successfully');
-    //     } catch (error) {
-    //         console.error('Test failed:', error);
-    //         await page.screenshot({ path: 'tests/features/dashboard/navigate/screenshots/auth-error.png', fullPage: true });
-    //         throw error;
-    //     }
-    // });
+  
     test('Check Auditer components on dashboard', async ({ page }) => {
 
         const autierSection = await dashboardPage.checkAutierSection();

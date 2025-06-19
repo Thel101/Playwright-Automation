@@ -1,45 +1,53 @@
 {
-    "urls":{
-        "baseUrl":"https://app-dev.auditmypayroll.com.au/companydirectory",
-        "companyList" : "https://app-dev.auditmypayroll.com.au/companies",
-        "createCompany" : "https://app-dev.auditmypayroll.com.au/managecompanydetail"
+    "urls": {
+        "baseUrl": "https://app-dev.auditmypayroll.com.au/companydirectory",
+        "companyList": "https://app-dev.auditmypayroll.com.au/companies",
+        "manageCompany": "https://app-dev.auditmypayroll.com.au/managecompanydetail",
+        "businessSettings": "https://app-dev.auditmypayroll.com.au/business-settings",
+        "companyDetail": "https://app-dev.auditmypayroll.com.au/viewcompanydetail"
     },
-    "elements" : {
-        "companyList" : {
-            "title" : "h1.main-title",
-            "tableHeader" : "table thead",
-            "tableBody" : "table tbody",
-            "createButton" : "a:has-text('Create Company')"
+    "elements": {
+        "companyList": {
+            "title": "h1.main-title",
+            "tableHeader": "table thead",
+            "tableBody": "table tbody",
+            "createButton": "a:has-text('Create Company')"
         },
-        "createCompany" : {
-            "title" : "h1.main-title",
-            "section" : "h3.sub-title",
-            "businessName" : "input#CompanyName",
-            "legalName" : "input#LegalName",
-            "foreignEntity" : "input[name='ForeignEntity'][value='yes']",
-            "headOffice" : "input[name='Headquarter'][value='yes']",
-            "createButton" : "button:has-text('Create')",
-            "street" : "input[name='AddressLine1']",
-            "suburbDropdown" : "div[id='suburb-comboboxlist_listbox']",
-            "stateComboList" : "#state-comboboxlist_input",
-            "postcodeComboList" : "input#postal-code-comboboxlist_input",
-            "contactName" : "#ContactName",
-            "contactEmail" : "#Email",
-            "contactPosition" : "#Position",
-            "contactPhone" : "#PhoneNo",
-            "industryDropDown" : "#industry-multiplelist_taglist",
-            "awardDropdown" : "#award-multiselection-input_taglist",
-            "employmentStateDropdown" : "#state-multiselection-multiselect",
-            "payrollFrequency" : "#payroll-frequency-multiselect_taglist",
-            "subscriptionPackage" : "#subscription-package-combobox_input",
-            "subscriptionDuration" : "#subscription-duration-combobox_input"
-
+        "companyFields": {
+            "title": "h1.main-title",
+            "section": "h3.sub-title",
+            "businessName": "input#CompanyName",
+            "legalName": "input#LegalName",
+            "foreignEntity": "input[name='ForeignEntity'][value='yes']",
+            "headOffice": "input[name='Headquarter'][value='yes']",
+            "createButton": "button:has-text('Create')",
+            "street": "input[name='AddressLine1']",
+            "suburbDropdown": "div[id='suburb-comboboxlist_listbox']",
+            "stateComboList": "#state-comboboxlist_input",
+            "postcodeComboList": "input#postal-code-comboboxlist_input",
+            "contactName": "#ContactName",
+            "contactEmail": "#Email",
+            "contactPosition": "#Position",
+            "contactPhone": "#PhoneNo",
+            "industryDropDown": "#industry-multiplelist_taglist",
+            "awardDropdown": "#award-multiselection-input_taglist",
+            "employmentStateDropdown": "#state-multiselection-multiselect",
+            "payrollFrequency": "#payroll-frequency-multiselect_taglist",
+            "payrollSoftwareDropdown": "#payroll-systems-multiselect_taglist",
+            "subscriptionPackage": "#subscription-package-combobox_input",
+            "subscriptionDuration": "#subscription-duration-combobox_input",
+            "editButton": "xpath=//a[contains(@class,'edit-btn')]",
+            "editTitle": "h1.main-title:has-text('Edit Company')"
         }
     },
-    "account" : {
-        "name" : "Phyu422",
-        "email" : "phyu42264@gmail.com",
-        "phone" : "0422 222 222",
-        "role" : "QA"
+    "account": {
+        "name": "Phyu422",
+        "email": "phyu42264@gmail.com",
+        "phone": "0422 222 222",
+        "role": "QA"
+    },
+    "contents" :{
+        "createCompanyTitle" : "Company Setup and Administration",
+        "description" : "Centralised control for easy access and management of company information."
     }
 }

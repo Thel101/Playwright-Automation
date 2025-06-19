@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
-// const CompleteAssessment = require('./pageObjects/CompleteAssessment');
-// const ManageAssessment = require('./pageObjects/ManageAssessment');
+const CompleteAssessment = require('./pageObjects/CompleteAssessment');
+const ManageAssessment = require('./pageObjects/ManageAssessment');
 const ReviewAssessment = require('./pageObjects/ReviewAssessment');
 test.use({ project: 'chrome-authenticated-assessment' });
 
@@ -17,10 +17,6 @@ test.describe('Assessment feature', () => {
         await complete_assessment.completeSystemPillarAssessment();
         await complete_assessment.completeCulturePillarAssessment();
         await complete_assessment.saveAssessment();
-    });
-    test('Manage assessment', async ({ page }) => {
-        const manage_assessment = new ManageAssessment(page);
-        await manage_assessment.navigateToManageAssessment()
     });
     test('Review assessment', async ({ page }) => {
         const review_assessment = new ReviewAssessment(page);
@@ -58,5 +54,10 @@ test.describe('Assessment feature', () => {
         await review_assessment.checkPillarDetail();
         console.log('Culture Pillar detail checked successfully.');
     })
+    test('Manage assessment', async ({ page }) => {
+        const manage_assessment = new ManageAssessment(page);
+        await manage_assessment.navigateToManageAssessment()
+    });
+  
 
 })

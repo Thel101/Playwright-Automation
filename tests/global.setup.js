@@ -67,6 +67,7 @@ setup('Setting up Authenticate', async ({ page }) => {
             ]);
             await response.json();
             console.log('Login flow completed');
+
         }
 
         // Verify successful login with more flexible approach

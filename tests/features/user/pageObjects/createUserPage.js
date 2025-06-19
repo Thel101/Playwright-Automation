@@ -7,32 +7,17 @@ class createUserPage extends BasePage {
         this.selectors = testData.elements
         this.urls = testData.urls;
     }
-    async directToAdminPage() {
-        console.log('Waiting for admin page to load...');
-        try {
-            await this.page.waitForSelector(this.selectors.adminMenu, {
-                state: 'visible',
-                timeout: 30000
-            });
-            await this.page.waitForLoadState('networkidle');
-            await this.page.click(this.selectors.adminMenu);
-            console.log('Admin page loaded successfully');
-        } catch (error) {
-            console.error('Failed to load admin page:', error);
-            await this.page.screenshot({ path: 'tests/features/dashboard/navigate/screenshots/admin-load-error.png', fullPage: true });
-            throw error;
-        }
-    }
-
+   
     async waitForAdminPageLoad() {
         console.log('Navigating to Admin Page...');
+        await this.page.goto(this.urls.businessSettingsUrl);
         const pageTitle = this.page.locator(this.selectors.adminPageTitle);
         const subTitle = this.page.locator(this.selectors.adminPageSubTitle);
         await pageTitle.waitFor({ state: 'visible', timeout: 30000 });
         await subTitle.waitFor({ state: 'visible', timeout: 30000 });
         const titleText = await pageTitle.textContent();
         const subTitleText = await subTitle.textContent();
-        return { titleText, subTitleText };
+        return [titleText, subTitleText ];
     }
 
     async navigateToUserList() {
